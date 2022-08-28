@@ -1,0 +1,12 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo '🏗️👷 Installing dependencies...'
+yarn install ||
+    (
+        echo '❌ Failed to do yarn.'
+        echo 'Please try using "yarn install" command again.'
+        false
+    )
+
+echo 'Dependencies installed.'
