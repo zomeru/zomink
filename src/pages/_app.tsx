@@ -5,7 +5,7 @@ import NProgress from 'nprogress';
 import { DefaultSeo } from 'next-seo';
 
 import SEO from '../../next-seo-config';
-import '../../styles/globals.css';
+import '../styles/globals.css';
 
 Router.events.on('routeChangeStart', () => {
   NProgress.configure({ showSpinner: false });
