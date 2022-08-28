@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:staged": "lint-staged",
     "format": "prettier --write ./**/*.{js,jsx,ts,tsx,json,md,mdx}",
     "prepare": "husky install"
   },
