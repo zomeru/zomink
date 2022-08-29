@@ -13,9 +13,9 @@ const Hero = () => {
         {/* des & img */}
         <div className='relative flex h-[400px] items-center justify-between xl:h-[500px] '>
           <div className='space-y-5 text-primary-500 xl:space-y-8'>
-            <h1 className='text-xl'>URL Shortener</h1>
+            <h1 className='text-xl'>Link Shortener</h1>
             <h2 className='text-5xl font-extrabold 2xl:text-6xl'>
-              Have full control over your links.
+              Manage your links in an easy way.
             </h2>
             <h3 className='text-infoText'>
               Zomy is a free and open-source link management platform with all

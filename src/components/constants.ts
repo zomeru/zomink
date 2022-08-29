@@ -53,3 +53,82 @@ export const FEATURES = [
     Icon: BsPeople,
   },
 ];
+
+interface IFAQs {
+  id: string;
+  question: string;
+  answer: Array<{
+    text: string;
+    coloredText?: string;
+    link?: string;
+  }>;
+}
+
+export const FAQs: IFAQs[] = [
+  {
+    id: 'question#1',
+    question: 'What is a Link Shortener?',
+    answer: [
+      {
+        text: 'A link shortener, also known as a URL shortener, seems like a simple tool, but it is a service that can have a dramatic impact on your marketing efforts.',
+      },
+      {
+        text: 'Link shorteners work by transforming any long URL into a shorter, more readable link. When a user clicks the shortened version, they’re automatically forwarded to the destination URL.',
+      },
+      {
+        text: 'Think of a short URL as a more descriptive and memorable nickname for your long webpage address. You can, for example, use a short URL like zomy.ink/SomeArticle so people will have a good idea about where your link will lead before they click it.',
+        coloredText: 'zomy.ink/SomeArticle',
+      },
+      {
+        text: 'If you’re contributing content to the online world, you need a link shortener.',
+      },
+    ],
+  },
+  {
+    id: 'question#2',
+    question: 'Why use a Link Shortener?',
+    answer: [
+      {
+        text: 'How many people can even remember a long web address, especially if it has tons of characters and symbols? A short URL can make your link more memorable. Not only does it allow people to easily recall and share your link with others, it can also dramatically improve traffic to your content.',
+      },
+      {
+        text: 'If you’re a business, you need a link shortener to make sure your links are easy to remember and easy to share with your customers.',
+      },
+      {
+        text: 'If you’re a student, you need a link shortener to make sure your online class room links are easy to remember and easy to share with your classmates.',
+      },
+      {
+        text: 'Zomy is a free link shortener that works for everyone.',
+      },
+    ],
+  },
+  {
+    id: 'question#3',
+    question: 'Features of Zomy’s Link Management Platform',
+    answer: [
+      {
+        text: 'If you’re looking to shorten just a link or two, you can use our link shortener service without registering an account.',
+      },
+      {
+        text: 'But if you’re going to share a lot of links, you’ll need an account to manage all your links. You can edit, delete or even generate a QR code for each link.',
+      },
+      {
+        text: 'Our product is designed to be easy to use and intuitive. With our team management feature, you can create teams and invite members to join them so you can manage your links in a better way.',
+      },
+    ],
+  },
+  {
+    id: 'question#4',
+    question: 'Why choose Zomy?',
+    answer: [
+      {
+        text: 'Zomy is a FREE link management platform that works for everyone.',
+      },
+      {
+        text: 'Create an account to get started for FREE.',
+        coloredText: 'Create an account to get started for FREE.',
+        link: '/auth/register',
+      },
+    ],
+  },
+];

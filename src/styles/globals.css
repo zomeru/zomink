@@ -54,4 +54,8 @@ a {
   .padding-sides {
     @apply px-[50px];
   }
+
+  .sc-heading {
+    @apply text-center text-3xl font-bold text-primary-500;
+  }
 }
