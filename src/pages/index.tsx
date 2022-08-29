@@ -1,7 +1,13 @@
 import type { NextPage } from 'next';
 
 import { Layout } from '@/components';
-import { FAQ, Features, Hero, ShortenField } from '@/components/_pages/landing';
+import {
+  Banner,
+  FAQ,
+  Features,
+  Hero,
+  ShortenField,
+} from '@/components/_pages/landing';
 
 const Home: NextPage = () => {
   return (
@@ -10,6 +16,7 @@ const Home: NextPage = () => {
       <ShortenField />
       <Features />
       <FAQ />
+      <Banner />
     </Layout>
   );
 };

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
 
 import { FAQs } from '@/components/constants';
-import Link from 'next/link';
 
 const FAQ = () => {
   const [selectedFAQ, setSelectedFAQ] = useState<string | null>(null);
