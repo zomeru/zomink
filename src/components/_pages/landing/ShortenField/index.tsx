@@ -4,6 +4,7 @@ import NProgress from 'nprogress';
 
 const ShortenField = () => {
   const [link, setLink] = useState('');
+  const [alias, setAlias] = useState('');
 
   const handleShortenLink = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +48,13 @@ const ShortenField = () => {
             placeholder='Paste your link to be shorten'
             value={link}
             onChange={(e) => setLink(e.target.value)}
+          />
+          <input
+            type='text'
+            className='w-[250px] rounded-lg px-5 outline-none'
+            placeholder='Alias (optional)'
+            value={alias}
+            onChange={(e) => setAlias(e.target.value)}
           />
           <button type='submit' className='btn-primary-lg'>
             Shorten
