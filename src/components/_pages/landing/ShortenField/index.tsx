@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import NProgress from 'nprogress';
 
+import { APP_NAME } from '@/components/constants';
+
 const ShortenField = () => {
   const [link, setLink] = useState('');
   const [alias, setAlias] = useState('');
@@ -45,7 +47,7 @@ const ShortenField = () => {
           <input
             type='text'
             className='w-full rounded-lg px-5 outline-none'
-            placeholder='Paste your link to be shorten'
+            placeholder='Paste your link here'
             value={link}
             onChange={(e) => setLink(e.target.value)}
           />
@@ -61,7 +63,7 @@ const ShortenField = () => {
           </button>
         </div>
         <p className='text-center text-sm font-light text-white'>
-          By clicking Shorten, you are agreeing to Zomy&apos;s{' '}
+          By clicking Shorten, you are agreeing to {APP_NAME}&apos;s{' '}
           <strong>
             <Link href='/pages/terms-of-service'>
               <a className='simple-links underline hover:text-primary-100'>

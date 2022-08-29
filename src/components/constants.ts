@@ -4,7 +4,12 @@ import { BsPeople } from 'react-icons/bs';
 import { AiFillInstagram } from 'react-icons/ai';
 import { FaDiscord, FaFacebookSquare } from 'react-icons/fa';
 
-export const APP_NAME = 'Zomy';
+export const APP_NAME = 'Zomink';
+
+export const APP_NAME_LOGO = {
+  name: 'Zom',
+  domain: 'ink',
+};
 
 export const NAV_LINKS = [
   {
@@ -78,8 +83,8 @@ export const FAQs: IFAQs[] = [
         text: 'Link shorteners work by transforming any long URL into a shorter, more readable link. When a user clicks the shortened version, they’re automatically forwarded to the destination URL.',
       },
       {
-        text: 'Think of a short URL as a more descriptive and memorable nickname for your long webpage address. You can, for example, use a short URL like zomy.ink/SomeArticle so people will have a good idea about where your link will lead before they click it.',
-        coloredText: 'zomy.ink/SomeArticle',
+        text: 'Think of a short URL as a more descriptive and memorable nickname for your long webpage address. You can, for example, use a short URL like zom.ink/SomeArticle so people will have a good idea about where your link will lead before they click it.',
+        coloredText: 'zom.ink/SomeArticle',
       },
       {
         text: 'If you’re contributing content to the online world, you need a link shortener.',
@@ -100,13 +105,13 @@ export const FAQs: IFAQs[] = [
         text: 'If you’re a student, you need a link shortener to make sure your online class room links are easy to remember and easy to share with your classmates.',
       },
       {
-        text: 'Zomy is a free link shortener that works for everyone.',
+        text: `${APP_NAME} is a free link shortener that works for everyone.`,
       },
     ],
   },
   {
     id: 'question#3',
-    question: 'Features of Zomy’s Link Management Platform',
+    question: `Features of ${APP_NAME}’s Link Management Platform`,
     answer: [
       {
         text: 'If you’re looking to shorten just a link or two, you can use our link shortener service without registering an account.',
@@ -121,10 +126,10 @@ export const FAQs: IFAQs[] = [
   },
   {
     id: 'question#4',
-    question: 'Why choose Zomy?',
+    question: `Why choose ${APP_NAME}?`,
     answer: [
       {
-        text: 'Zomy is a FREE link management platform that works for everyone.',
+        text: `${APP_NAME} is a FREE link management platform that works for everyone.`,
       },
       {
         text: 'Create an account to get started for FREE.',
@@ -146,7 +151,7 @@ interface IFOOTER {
 
 export const FOOTER_LINKS: IFOOTER[] = [
   {
-    title: 'Zomy',
+    title: APP_NAME,
     links: [
       {
         name: 'About',
@@ -171,7 +176,7 @@ export const FOOTER_LINKS: IFOOTER[] = [
     ],
   },
   {
-    title: 'Feautures',
+    title: 'Features',
     links: [
       {
         name: 'Link Shortener',
@@ -206,12 +211,12 @@ export const FOOTER_LINKS: IFOOTER[] = [
       },
       {
         name: 'Bug Report',
-        link: 'https://github.com/zomeru/zomy-client/issues/new',
+        link: 'https://github.com/zomeru/zomink-client/issues/new',
         isNewTab: true,
       },
       {
         name: 'Feature Request',
-        link: 'https://github.com/zomeru/zomy-client/issues/new',
+        link: 'https://github.com/zomeru/zomink-client/issues/new',
         isNewTab: true,
       },
     ],
