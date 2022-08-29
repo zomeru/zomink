@@ -32,7 +32,10 @@ const ShortenField = () => {
   };
 
   return (
-    <section className='padding-sides my-[20px] w-full bg-primary-500 py-[35px] 2xl:my-[50px]'>
+    <section
+      id='shortener'
+      className='padding-sides my-[20px] w-full bg-primary-500 py-[35px] 2xl:my-[50px]'
+    >
       <form
         className='max-width my-auto h-full space-y-3 '
         onSubmit={handleShortenLink}

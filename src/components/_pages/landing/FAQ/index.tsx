@@ -46,12 +46,18 @@ const FAQ = () => {
             >
               {answer.map(({ text, coloredText, link }, index) => {
                 if (!coloredText) {
-                  return <p key={index}>{text}</p>;
+                  return (
+                    <p key={index} className='text-infoText'>
+                      {text}
+                    </p>
+                  );
                 }
+
                 const newText: string[] = text.split(coloredText);
                 const texts: string[] = [newText[0], coloredText, newText[1]];
+
                 return (
-                  <p key={index}>
+                  <p key={index} className='text-infoText'>
                     {texts.map((txt, tIndex) => {
                       if (link && tIndex === 1) {
                         return (

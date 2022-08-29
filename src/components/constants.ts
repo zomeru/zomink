@@ -1,6 +1,8 @@
 import { BiLink } from 'react-icons/bi';
 import { MdOutlineAnalytics, MdOutlineManageSearch } from 'react-icons/md';
 import { BsPeople } from 'react-icons/bs';
+import { AiFillInstagram } from 'react-icons/ai';
+import { FaDiscord, FaFacebookSquare } from 'react-icons/fa';
 
 export const APP_NAME = 'Zomy';
 
@@ -130,5 +132,106 @@ export const FAQs: IFAQs[] = [
         link: '/auth/register',
       },
     ],
+  },
+];
+
+interface IFOOTER {
+  title: string;
+  links: Array<{
+    name: string;
+    link: string;
+    isNewTab?: boolean;
+  }>;
+}
+
+export const FOOTER_LINKS: IFOOTER[] = [
+  {
+    title: 'Zomy',
+    links: [
+      {
+        name: 'About',
+        link: '/pages/about',
+      },
+      {
+        name: 'Terms of Service',
+        link: '/pages/terms-of-service',
+      },
+      {
+        name: 'Privacy Policy',
+        link: '/pages/privacy-policy',
+      },
+      {
+        name: 'Abuse Report',
+        link: '/pages/report',
+      },
+      {
+        name: 'Contact',
+        link: '/pages/contact',
+      },
+    ],
+  },
+  {
+    title: 'Feautures',
+    links: [
+      {
+        name: 'Link Shortener',
+        link: '#shortener',
+      },
+      {
+        name: 'Management',
+        link: '#features',
+      },
+      {
+        name: 'Analytics',
+        link: '#features',
+      },
+      {
+        name: 'Team Features',
+        link: '#features',
+      },
+    ],
+  },
+  {
+    title: 'Open Source',
+    links: [
+      {
+        name: 'Repository',
+        link: '/github',
+        isNewTab: true,
+      },
+      {
+        name: 'Contribute',
+        link: '/github',
+        isNewTab: true,
+      },
+      {
+        name: 'Bug Report',
+        link: 'https://github.com/zomeru/zomy-client/issues/new',
+        isNewTab: true,
+      },
+      {
+        name: 'Feature Request',
+        link: 'https://github.com/zomeru/zomy-client/issues/new',
+        isNewTab: true,
+      },
+    ],
+  },
+];
+
+export const FOOTER_SOCIALS = [
+  {
+    name: 'Facebook',
+    Icon: FaFacebookSquare,
+    link: '#',
+  },
+  {
+    name: 'Instagram',
+    Icon: AiFillInstagram,
+    link: '#',
+  },
+  {
+    name: 'Discord',
+    Icon: FaDiscord,
+    link: '#',
   },
 ];
