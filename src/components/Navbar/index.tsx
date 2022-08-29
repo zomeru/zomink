@@ -1,10 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-import { APP_NAME } from '@/constants/app';
-import { NAV_LINKS } from '@/constants/navbar';
+import { APP_NAME, NAV_LINKS } from '../constants';
 
 const Navbar = () => {
+  const { push } = useRouter();
+
   return (
     <header className='padding-sides w-auto'>
       <nav className='max-width  flex h-[100px] w-full items-center justify-between text-primary-500'>
@@ -29,7 +31,11 @@ const Navbar = () => {
               </Link>
             );
           })}
-          <button type='button' className='btn-primary'>
+          <button
+            type='button'
+            className='btn-primary'
+            onClick={() => push('/auth/register')}
+          >
             Sign up
           </button>
         </div>

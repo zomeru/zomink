@@ -23,7 +23,7 @@ const ShortenField = () => {
 
   return (
     <form
-      className='padding-sides my-[0px] w-full bg-primary-500 py-[35px] 2xl:my-[50px]'
+      className='padding-sides my-[20px] w-full bg-primary-500 py-[35px] 2xl:my-[50px]'
       onSubmit={handleShortenLink}
     >
       <div className='max-width my-auto h-full space-y-3'>
@@ -42,7 +42,7 @@ const ShortenField = () => {
         <p className='text-center text-sm font-light text-white'>
           By clicking Shorten, you are agreeing to Zomy&apos;s{' '}
           <strong>
-            <Link href='/terms-of-service'>
+            <Link href='/pages/terms-of-service'>
               <a className='simple-links underline hover:text-primary-100'>
                 Terms of Service
               </a>
@@ -51,7 +51,7 @@ const ShortenField = () => {
           ,{' '}
           <strong>
             {' '}
-            <Link href='/privacy-policy'>
+            <Link href='/pages/privacy-policy'>
               <a className='simple-links underline hover:text-primary-100'>
                 Privacy Policy
               </a>

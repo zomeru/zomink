@@ -1,9 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const HERO_IMAGE = '/assets/images/hero_image.png';
 
 const Hero = () => {
+  const { push } = useRouter();
+
   return (
     <section className='padding-sides mt-0 2xl:mt-[35px]'>
       <div className='max-width h-auto'>
@@ -20,10 +23,18 @@ const Hero = () => {
               your links with your custom alias.
             </h3>
             <div className='space-x-3'>
-              <button type='button' className='btn-primary-lg'>
+              <button
+                type='button'
+                className='btn-primary-lg'
+                onClick={() => push('/auth/register')}
+              >
                 Get started
               </button>
-              <button type='button' className='btn-secondary-lg'>
+              <button
+                type='button'
+                className='btn-secondary-lg'
+                onClick={() => push('#features')}
+              >
                 Explore features
               </button>
             </div>
