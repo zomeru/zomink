@@ -1,32 +1,45 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import NProgress from 'nprogress';
 
 const ShortenField = () => {
   const [link, setLink] = useState('');
 
   const handleShortenLink = async (e: React.FormEvent) => {
     e.preventDefault();
+    NProgress.configure({ showSpinner: false });
+    NProgress.start();
+
+    // NProgress.set(0.8); // 1 => 100%
+
+    setTimeout(() => {
+      if (
+        !link.match(
+          /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+        ) ||
+        link.includes(' ')
+      ) {
+        console.log('not a valid url', link);
+        NProgress.done();
+        return;
+      }
+
+      console.log('valid url', link);
+      NProgress.done();
+    }, 2000);
 
     // if link is not a valid url, return
-    if (
-      !link.match(
-        /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
-      ) ||
-      link.includes(' ')
-    ) {
-      console.log('not a valid url', link);
-      return;
-    }
-
-    console.log('valid url', link);
   };
 
   return (
-    <form
+    <section
+      id='shortener'
       className='padding-sides my-[20px] w-full bg-primary-500 py-[35px] 2xl:my-[50px]'
-      onSubmit={handleShortenLink}
     >
-      <div className='max-width my-auto h-full space-y-3'>
+      <form
+        className='max-width my-auto h-full space-y-3 '
+        onSubmit={handleShortenLink}
+      >
         <div className='flex w-full space-x-3'>
           <input
             type='text'
@@ -59,8 +72,8 @@ const ShortenField = () => {
           </strong>
           , and <strong>Use of Cookies</strong>.
         </p>
-      </div>
-    </form>
+      </form>
+    </section>
   );
 };
 

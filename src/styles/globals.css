@@ -47,11 +47,19 @@ a {
     @apply h-[55px] rounded-lg border border-primary-200 bg-white px-[30px] text-primary-200 transition-all duration-200 ease-in-out hover:bg-sky-100;
   }
 
+  .btn-white-lg {
+    @apply h-[55px] rounded-lg  bg-white  px-[30px] text-primary-500 transition-all  duration-200 ease-in-out hover:bg-neutral-300;
+  }
+
   .max-width {
     @apply mx-auto max-w-[1500px];
   }
 
   .padding-sides {
     @apply px-[50px];
+  }
+
+  .sc-heading {
+    @apply text-center text-3xl font-bold text-primary-500;
   }
 }
