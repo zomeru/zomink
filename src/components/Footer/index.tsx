@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 
 import { APP_NAME, FOOTER_LINKS, FOOTER_SOCIALS } from '../constants';
+import Logo from '../Logo';
 
 const Footer = () => {
   return (
@@ -34,9 +35,7 @@ const Footer = () => {
           </div>
         ))}
         <div>
-          <div className='text-4xl font-black uppercase text-primary-200'>
-            {APP_NAME}
-          </div>
+          <Logo />
           <div className='text-infoText'>
             <h1>&copy; 2022 | {APP_NAME}</h1>
             <h2>Free Custom Link Shortener</h2>
@@ -54,7 +53,7 @@ const Footer = () => {
                     style={{
                       fontSize: `${index * 4 + 40}px`,
                     }}
-                    className="text-infoText transition-all duration-300 ease-in-out hover:text-primary-200"
+                    className='text-infoText transition-all duration-300 ease-in-out hover:text-primary-200'
                   />
                 </a>
               ))}

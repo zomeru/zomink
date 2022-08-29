@@ -2,7 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { APP_NAME, NAV_LINKS } from '../constants';
+import { NAV_LINKS } from '../constants';
+import Logo from '../Logo';
 
 const Navbar = () => {
   const { push } = useRouter();
@@ -12,9 +13,7 @@ const Navbar = () => {
       <nav className='max-width  flex h-[100px] w-full items-center justify-between text-primary-500'>
         <Link href='/' passHref>
           <a href='/'>
-            <h1 className='text-4xl font-black uppercase text-primary-200'>
-              {APP_NAME}
-            </h1>
+            <Logo />
           </a>
         </Link>
         <div className='flex items-center space-x-[30px]'>

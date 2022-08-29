@@ -1,6 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import { APP_NAME } from '@/components/constants';
+
 type Data = {
   name: string;
 };
@@ -9,5 +11,5 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ name: 'Zomy - Free Link Shortener' });
+  res.status(200).json({ name: `${APP_NAME} - Free Link Shortener` });
 }

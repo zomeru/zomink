@@ -2,6 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
+import { APP_NAME } from '@/components/constants';
+
 const HERO_IMAGE = '/assets/images/hero_image.png';
 
 const Hero = () => {
@@ -18,8 +20,8 @@ const Hero = () => {
               Manage your links in an easy way.
             </h2>
             <h3 className='text-infoText'>
-              Zomy is a free and open-source link management platform with all
-              the features you need in one place. Manage, track, and shorten
+              {APP_NAME} is a free and open-source link management platform with
+              all the features you need in one place. Manage, track, and shorten
               your links with your custom alias.
             </h3>
             <div className='space-x-3'>
@@ -44,7 +46,7 @@ const Hero = () => {
               src={HERO_IMAGE}
               layout='fill'
               objectFit='contain'
-              alt='Zomy - Hero Analytics Image'
+              alt={`${APP_NAME} - Hero Analytics Image`}
             />
           </div>
         </div>
