@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import type { AppProps } from 'next/app';
 import { Router } from 'next/router';
 import NProgress from 'nprogress';
@@ -16,10 +15,10 @@ Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Fragment>
+    <>
       <DefaultSeo {...SEO} />
       <Component {...pageProps} />
-    </Fragment>
+    </>
   );
 }
 
