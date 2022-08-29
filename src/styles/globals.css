@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -27,11 +27,31 @@ a {
     @apply relative transition-all duration-300 ease-in-out after:absolute after:left-0 after:-bottom-[2px] after:bg-primary-200 after:transition-all after:duration-300 after:ease-in-out after:content-[""] hover:text-primary-200;
   }
 
+  .simple-links {
+    @apply transition-all duration-300 ease-in-out hover:text-primary-200;
+  }
+
   .btn-primary {
     @apply h-[45px] rounded-lg bg-primary-200 px-[20px] text-white transition-all duration-200 ease-in-out hover:bg-primary-300;
   }
 
+  .btn-secondary {
+    @apply h-[45px] rounded-lg border border-primary-200 bg-white px-[20px] text-primary-200 transition-all duration-200 ease-in-out hover:bg-sky-100;
+  }
+
+  .btn-primary-lg {
+    @apply h-[55px] rounded-lg bg-primary-200 px-[30px] text-white transition-all duration-200 ease-in-out hover:bg-primary-300;
+  }
+
+  .btn-secondary-lg {
+    @apply h-[55px] rounded-lg border border-primary-200 bg-white px-[30px] text-primary-200 transition-all duration-200 ease-in-out hover:bg-sky-100;
+  }
+
   .max-width {
-    @apply max-w-[1500px];
+    @apply mx-auto max-w-[1500px];
+  }
+
+  .padding-sides {
+    @apply px-[50px];
   }
 }

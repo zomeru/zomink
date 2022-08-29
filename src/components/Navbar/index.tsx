@@ -6,8 +6,8 @@ import { NAV_LINKS } from '@/constants/navbar';
 
 const Navbar = () => {
   return (
-    <header className=' w-auto px-[50px]'>
-      <nav className='max-width mx-auto flex h-[100px] w-full items-center justify-between text-primary-500'>
+    <header className='padding-sides w-auto'>
+      <nav className='max-width  flex h-[100px] w-full items-center justify-between text-primary-500'>
         <Link href='/' passHref>
           <a href='/'>
             <h1 className='text-4xl font-black uppercase text-primary-200'>
