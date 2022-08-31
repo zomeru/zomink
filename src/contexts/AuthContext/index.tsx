@@ -57,7 +57,6 @@ const getCurrentUser = async (token: string) => {
   try {
     const currentUser = await fetchAPI('/users/me', {
       method: 'GET',
-      redirect: 'follow',
       credentials: 'include',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,7 +74,6 @@ const refreshToken = async (token: string) => {
   try {
     const newSession = await fetchAPI('/session/refresh', {
       method: 'POST',
-      redirect: 'follow',
       credentials: 'include',
       headers: {
         'x-headers': token,
@@ -148,7 +146,6 @@ export const AuthProvider = ({ children }: AuthContextProviderProps) => {
       NProgress.start();
       const loginData = await fetchAPI('/session', {
         method: 'POST',
-        redirect: 'follow',
         credentials: 'include',
         body: JSON.stringify({ ...values }),
       });
@@ -197,7 +194,6 @@ export const AuthProvider = ({ children }: AuthContextProviderProps) => {
     try {
       await fetchAPI('/session/logout', {
         method: 'POST',
-        redirect: 'follow',
         credentials: 'include',
       });
       localStorage.removeItem(process.env.NEXT_PUBLIC_ACCESS_TOKEN as string);
