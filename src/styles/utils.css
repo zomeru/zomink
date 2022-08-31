@@ -15,3 +15,25 @@
   width: 0px;
   transition: all 0.3s ease-in-out;
 }
+
+.text-separator::before,
+.text-separator::after {
+  content: '';
+  position: relative;
+  border-top: 1px solid #cfcfcf;
+  display: inline-block;
+  vertical-align: middle;
+  width: calc(50% - 22px);
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.text-separator::before {
+  right: 10px;
+  margin-left: -50%;
+}
+
+.text-separator::after {
+  left: 10px;
+  margin-right: -50%;
+}

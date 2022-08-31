@@ -1,7 +1,14 @@
 import React from 'react';
 
+import { Layout } from '@/components';
+import { RegisterComponent } from '@/components/_pages/auth';
+
 const Register = () => {
-  return <div>Register</div>;
+  return (
+    <Layout>
+      <RegisterComponent />
+    </Layout>
+  );
 };
 
 export default Register;

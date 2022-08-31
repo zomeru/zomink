@@ -3,7 +3,9 @@ import { Router } from 'next/router';
 import NProgress from 'nprogress';
 import { DefaultSeo } from 'next-seo';
 
+import { AuthProvider } from '@/contexts';
 import SEO from '../../next-seo-config';
+
 import '../styles/globals.css';
 import 'nprogress/nprogress.css';
 
@@ -16,10 +18,10 @@ Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
-      <DefaultSeo {...SEO} />
-      <Component {...pageProps} />
-    </>
+    <AuthProvider>
+        <DefaultSeo {...SEO} />
+        <Component {...pageProps} />
+      </AuthProvider>
   );
 }
 

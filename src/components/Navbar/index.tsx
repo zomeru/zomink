@@ -2,11 +2,15 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import { useAuth } from '@/contexts/AuthContext';
 import { NAV_LINKS } from '../constants';
 import Logo from '../Logo';
 
 const Navbar = () => {
   const { push } = useRouter();
+  const { user, logout } = useAuth();
+
+  console.log('user navbar', user);
 
   return (
     <header className='padding-sides w-auto'>
@@ -18,14 +22,24 @@ const Navbar = () => {
         </Link>
         <div className='flex items-center space-x-[30px]'>
           {NAV_LINKS.map(({ name, link }) => {
+            if (name === 'Log in' && user) {
+              return null;
+            }
+            const newName = user && name === 'My URLs' ? 'App' : name;
+
             return (
-              <Link href={link} passHref key={name}>
+              <Link
+                href={newName === 'App' ? '/app' : link}
+                passHref
+                key={newName}
+              >
                 <a
                   className={`links ${
-                    name === 'Donate' && 'after:bg-pink-600 hover:text-pink-600'
+                    newName === 'Donate' &&
+                    'after:bg-pink-600 hover:text-pink-600'
                   }`}
                 >
-                  {name}
+                  {newName}
                 </a>
               </Link>
             );
@@ -33,9 +47,15 @@ const Navbar = () => {
           <button
             type='button'
             className='btn-primary'
-            onClick={() => push('/auth/register')}
+            onClick={() => {
+              if (user) {
+                logout();
+              } else {
+                push('/auth/register');
+              }
+            }}
           >
-            Sign up
+            {user ? 'Log out' : 'Sign up'}
           </button>
         </div>
       </nav>
