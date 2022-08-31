@@ -19,6 +19,7 @@ module.exports = {
         secondary: '#DEA175',
         infoText: '#777777',
         placeholderText: '#999999',
+        bGray: '#cfcfcf',
       },
     },
   },

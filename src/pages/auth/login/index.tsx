@@ -1,7 +1,14 @@
 import React from 'react';
 
+import { Layout } from '@/components';
+import { LoginComponent } from '@/components/_pages/auth';
+
 const Login = () => {
-  return <div>Login</div>;
+  return (
+    <Layout>
+      <LoginComponent />
+    </Layout>
+  );
 };
 
 export default Login;
