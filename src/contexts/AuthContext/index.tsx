@@ -194,7 +194,6 @@ export const AuthProvider = ({ children }: AuthContextProviderProps) => {
     try {
       await fetchAPI('/session/logout', {
         method: 'POST',
-        credentials: 'include',
       });
       localStorage.removeItem(process.env.NEXT_PUBLIC_ACCESS_TOKEN as string);
       localStorage.removeItem(process.env.NEXT_PUBLIC_REFRESH_TOKEN as string);

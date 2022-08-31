@@ -10,7 +10,6 @@ async function fetchAPI(endpoint: string, options?: RequestInit) {
         Accept: 'application/json',
         ...(options?.headers && options.headers),
       },
-      credentials: 'include',
     }
   );
 
