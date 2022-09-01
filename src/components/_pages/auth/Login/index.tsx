@@ -44,8 +44,10 @@ const Login = () => {
           }
           if (res?.data.status === 401) {
             setLoginError(res?.data?.error || res?.data?.message);
+            setSubmitting(false);
           } else {
             setLoginError('Something went wrong! Please try again later.');
+            setSubmitting(false);
           }
 
           setSubmitting(false);
@@ -58,6 +60,8 @@ const Login = () => {
           }
           setSubmitting(false);
         });
+
+      setSubmitting(false);
     }, 400);
   };
 
@@ -90,7 +94,7 @@ const Login = () => {
                 <a className='text-primary-200 underline'>Sign up</a>
               </Link>
               {' or '}
-              <Link href="#">
+              <Link href='#'>
                 <a className='text-primary-200 underline'>
                   Sign up with Google
                 </a>
@@ -144,7 +148,8 @@ const Login = () => {
               disabled={isSubmitting}
               type='submit'
               className={`btn-primary-lg ${
-                isSubmitting && 'cursor-not-allowed bg-neutral-600'
+                isSubmitting &&
+                'cursor-not-allowed bg-neutral-600 hover:bg-neutral-600'
               }`}
             >
               Log in
