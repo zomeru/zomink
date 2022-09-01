@@ -3,6 +3,7 @@ import Link from 'next/link';
 import NProgress from 'nprogress';
 
 import { APP_NAME } from '@/components/constants';
+import linkCheck from '@/utils/linkCheck/linkCheck';
 
 const ShortenField = () => {
   const [link, setLink] = useState('');
@@ -13,25 +14,15 @@ const ShortenField = () => {
     NProgress.configure({ showSpinner: false });
     NProgress.start();
 
-    // NProgress.set(0.8); // 1 => 100%
-
     setTimeout(() => {
-      if (
-        !link.match(
-          /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
-        ) ||
-        link.includes(' ')
-      ) {
-        console.log('not a valid url', link);
-        NProgress.done();
-        return;
+      if (linkCheck(link)) {
+        console.log('Link is valid');
+      } else {
+        console.log('Link is not invalid');
       }
 
-      console.log('valid url', link);
       NProgress.done();
     }, 2000);
-
-    // if link is not a valid url, return
   };
 
   return (
