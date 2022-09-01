@@ -10,8 +10,6 @@ const Navbar = () => {
   const { push } = useRouter();
   const { data, logout } = useUser();
 
-  console.log('uusers nav', data);
-
   return (
     <header className='padding-sides w-auto'>
       <nav className='max-width  flex h-[100px] w-full items-center justify-between text-primary-500'>
