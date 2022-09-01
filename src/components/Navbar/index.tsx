@@ -2,15 +2,15 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { useAuth } from '@/contexts/AuthContext';
+import { useUser } from '@/contexts/AuthContext';
 import { NAV_LINKS } from '../constants';
 import Logo from '../Logo';
 
 const Navbar = () => {
   const { push } = useRouter();
-  const { user, logout } = useAuth();
+  const { data, logout } = useUser();
 
-  console.log('user navbar', user);
+  console.log('uusers nav', data);
 
   return (
     <header className='padding-sides w-auto'>
@@ -22,10 +22,11 @@ const Navbar = () => {
         </Link>
         <div className='flex items-center space-x-[30px]'>
           {NAV_LINKS.map(({ name, link }) => {
-            if (name === 'Log in' && user) {
+            if (name === 'Log in' && data?.data?.user) {
               return null;
             }
-            const newName = user && name === 'My URLs' ? 'App' : name;
+            const newName =
+              data?.data?.user && name === 'My URLs' ? 'App' : name;
 
             return (
               <Link
@@ -48,14 +49,14 @@ const Navbar = () => {
             type='button'
             className='btn-primary'
             onClick={() => {
-              if (user) {
+              if (data?.data?.user) {
                 logout();
               } else {
                 push('/auth/register');
               }
             }}
           >
-            {user ? 'Log out' : 'Sign up'}
+            {data?.data?.user ? 'Log out' : 'Sign up'}
           </button>
         </div>
       </nav>

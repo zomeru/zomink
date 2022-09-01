@@ -1,30 +1,45 @@
-import React, {
+import {
+  createContext,
+  FC,
+  useContext,
   useState,
   useEffect,
-  createContext,
+  ReactNode,
   useMemo,
-  useContext,
 } from 'react';
-import router from 'next/router';
-import { object, string, TypeOf } from 'zod';
-import NProgress from 'nprogress';
+import { useRouter } from 'next/router';
+import { object, TypeOf, z } from 'zod';
 
-import fetchAPI from '@/utils/fetchAPI';
+import { fetcher, poster } from '@/utils/fetcher';
 
 export const loginUserSchema = object({
-  email: string().min(1, 'Username is required'),
-  password: string().min(1, 'Password is required'),
+  // email: string({
+  //   required_error: 'Email is required',
+  // }).min(1, 'Username is required'),
+  email: z
+    .string({
+      required_error: 'Email or username is required',
+    })
+    .min(1, 'Email or username is required'),
+  password: z
+    .string({
+      required_error: 'Password is required',
+    })
+    .min(1, 'Password is required'),
 });
 
 export const createUserSchema = object({
-  username: string().min(6, 'Username must be at least 6 characters long'),
-  firstName: string().min(2, 'First name must be at least 2 characters'),
-  lastName: string().min(2, 'Last name must be at least 2 characters'),
-  password: string().min(8, 'Password must be at least 8 characters long'),
-  passwordConfirmation: string().min(8, 'Password confirmation is required'),
-  email: string({
-    required_error: 'Email is required',
-  }).email('Not a valid email'),
+  username: z.string({}).min(6, 'Username must be at least 6 characters long'),
+  firstName: z.string().min(2, 'First name must be at least 2 characters'),
+  lastName: z.string().min(2, 'Last name must be at least 2 characters'),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
+  passwordConfirmation: z.string().min(8, 'Password confirmation is required'),
+  email: z
+    .string({
+      required_error: 'Email is required',
+    })
+    .min(1, 'Email is required')
+    .email('Not a valid email'),
 }).refine((data) => data.password === data.passwordConfirmation, {
   message: 'Passwords do not match',
   path: ['passwordConfirmation'],
@@ -33,197 +48,77 @@ export const createUserSchema = object({
 export type CreateUserInput = TypeOf<typeof createUserSchema>;
 export type LoginUserInput = TypeOf<typeof loginUserSchema>;
 
-interface AuthContextProps {
-  user: any | null;
-  accessToken: string | null;
+export interface DataDocument {
+  status: number;
+  data?: any;
+  error?: string;
+  message?: string;
+}
+
+export interface UserContext {
+  data: any;
   /* eslint-disable no-unused-vars */
-  login: ({ email, password }: LoginUserInput) => void;
-  register: (values: CreateUserInput) => void;
-  logout: () => void;
+  setData: (data?: DataDocument) => void;
   /* eslint-enable no-unused-vars */
+  logout: () => void;
 }
 
-const authContextDefaultValues: AuthContextProps = {
-  user: null,
-  accessToken: null,
-  login: () => {},
-  register: () => {},
-  logout: () => {},
-};
+export const UserContextImpl = createContext<UserContext>(null!);
 
-const AuthContext = createContext<AuthContextProps>(authContextDefaultValues);
-
-const getCurrentUser = async (token: string) => {
-  try {
-    const currentUser = await fetchAPI('/users/me', {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return currentUser;
-  } catch (error) {
-    console.log('error getting current user', error);
-    return null;
-  }
-};
-
-const refreshToken = async (token: string) => {
-  try {
-    const newSession = await fetchAPI('/session/refresh', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'x-headers': token,
-      },
-    });
-
-    return newSession;
-  } catch (error) {
-    console.log('error refreshing token', error);
-    return null;
-  }
-};
-
-export interface AuthContextProviderProps {
-  children: React.ReactNode;
+export function useUser() {
+  return useContext(UserContextImpl);
 }
 
-export const AuthProvider = ({ children }: AuthContextProviderProps) => {
-  const [user, setUser] = useState<any>(null);
-  const [accessToken, setAccessToken] = useState<string | null>('');
+interface Props {
+  children?: ReactNode;
+  initialData?: DataDocument;
+}
+
+const UserProvider: FC<Props> = ({ children, initialData }) => {
+  const { push } = useRouter();
+
+  const [data, setData] = useState<DataDocument | undefined>(initialData);
+
+  const getMe = async () => {
+    const response = await fetcher<DataDocument>(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/users/me`
+    );
+
+    console.log('data provider', response);
+
+    if (
+      (response && response.status === 200) ||
+      (response.data && response.data.status === 200)
+    ) {
+      setData(response);
+    }
+    // else push('/');
+  };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const acsToken = localStorage.getItem(
-          process.env.NEXT_PUBLIC_ACCESS_TOKEN as string
-        );
-
-        if (!acsToken && !accessToken) {
-          setUser(null);
-          setAccessToken(null);
-          return;
-        }
-
-        const currentUser = await getCurrentUser(acsToken || accessToken || '');
-
-        if (!currentUser) {
-          // refresh token
-          const rfToken = localStorage.getItem(
-            process.env.NEXT_PUBLIC_REFRESH_TOKEN as string
-          );
-
-          if (!rfToken) {
-            setUser(null);
-            setAccessToken(null);
-            return;
-          }
-
-          const newSession = await refreshToken(rfToken);
-
-          const newUser = await getCurrentUser(newSession.accessToken);
-
-          setUser(newUser);
-          setAccessToken(newSession.accessToken);
-        }
-
-        setUser(currentUser);
-        setAccessToken(acsToken || accessToken);
-      } catch (error) {
-        console.log('error getting current user', error);
-        setUser(null);
-        setAccessToken(null);
-      }
-    })();
-  }, []);
-
-  const login = async (values: LoginUserInput) => {
-    try {
-      NProgress.configure({ showSpinner: false });
-      NProgress.start();
-      const loginData = await fetchAPI('/session', {
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify({ ...values }),
-      });
-
-      setAccessToken(loginData.accessToken);
-      localStorage.setItem(
-        process.env.NEXT_PUBLIC_ACCESS_TOKEN as string,
-        loginData.accessToken
-      );
-      localStorage.setItem(
-        process.env.NEXT_PUBLIC_REFRESH_TOKEN as string,
-        loginData.refreshToken
-      );
-
-      const currentUser = await getCurrentUser(loginData.accessToken);
-
-      if (currentUser) {
-        setUser(currentUser);
-        router.push('/');
-      }
-    } catch (error: any) {
-      console.log('login error', error);
-    }
-  };
-  const register = async (values: CreateUserInput) => {
-    try {
-      NProgress.configure({ showSpinner: false });
-      NProgress.start();
-      await fetchAPI(`/users`, {
-        method: 'POST',
-        body: JSON.stringify({ ...values }),
-      });
-
-      const loginValues = {
-        email: values.email,
-        password: values.password,
-      } as LoginUserInput;
-
-      login(loginValues);
-    } catch (error) {
-      console.log('error registering user', error);
-    }
-  };
+    if (!data) getMe();
+  }, [data]);
 
   const logout = async () => {
     try {
-      await fetchAPI('/session/logout', {
-        method: 'POST',
-      });
-      localStorage.removeItem(process.env.NEXT_PUBLIC_ACCESS_TOKEN as string);
-      localStorage.removeItem(process.env.NEXT_PUBLIC_REFRESH_TOKEN as string);
-      setUser(null);
-      setAccessToken(null);
-      router.push('/');
+      await poster(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/logout`, {});
+      setData(undefined);
+      push('/');
     } catch (error) {
-      console.log('error logging out', error);
+      console.log('logout error', error);
     }
   };
 
-  const authProviderValue = useMemo(
-    () => ({
-      user,
-      accessToken,
-      register,
-      login,
-      logout,
-    }),
-    [user, accessToken, login, logout]
+  const value = useMemo(
+    () => ({ data, setData, logout }),
+    [data, setData, logout]
   );
 
   return (
-    <AuthContext.Provider value={authProviderValue}>
+    <UserContextImpl.Provider value={value}>
       {children}
-    </AuthContext.Provider>
+    </UserContextImpl.Provider>
   );
 };
 
-export default AuthProvider;
-
-export const useAuth = () => useContext(AuthContext);
-export const AuthConsumer = AuthContext.Consumer;
+export default UserProvider;
