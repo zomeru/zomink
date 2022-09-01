@@ -218,7 +218,8 @@ const Register = () => {
               type='submit'
               disabled={isSubmitting}
               className={`btn-primary-lg ${
-                isSubmitting && 'cursor-not-allowed bg-neutral-600'
+                isSubmitting &&
+                'cursor-not-allowed bg-neutral-600 hover:bg-neutral-600'
               }`}
             >
               Create an account
