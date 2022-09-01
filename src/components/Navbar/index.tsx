@@ -20,11 +20,10 @@ const Navbar = () => {
         </Link>
         <div className='flex items-center space-x-[30px]'>
           {NAV_LINKS.map(({ name, link }) => {
-            if (name === 'Log in' && data?.data?.user) {
+            if (name === 'Log in' && data?.user) {
               return null;
             }
-            const newName =
-              data?.data?.user && name === 'My URLs' ? 'App' : name;
+            const newName = data?.user && name === 'My URLs' ? 'App' : name;
 
             return (
               <Link
@@ -47,14 +46,14 @@ const Navbar = () => {
             type='button'
             className='btn-primary'
             onClick={() => {
-              if (data?.data?.user) {
+              if (data?.user) {
                 logout();
               } else {
                 push('/auth/register');
               }
             }}
           >
-            {data?.data?.user ? 'Log out' : 'Sign up'}
+            {data?.user ? 'Log out' : 'Sign up'}
           </button>
         </div>
       </nav>

@@ -13,9 +13,6 @@ import { object, TypeOf, z } from 'zod';
 import { fetcher, poster } from '@/utils/fetcher';
 
 export const loginUserSchema = object({
-  // email: string({
-  //   required_error: 'Email is required',
-  // }).min(1, 'Username is required'),
   email: z
     .string({
       required_error: 'Email or username is required',
@@ -33,7 +30,7 @@ export const createUserSchema = object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
   lastName: z.string().min(2, 'Last name must be at least 2 characters'),
   password: z.string().min(8, 'Password must be at least 8 characters long'),
-  passwordConfirmation: z.string().min(8, 'Password confirmation is required'),
+  passwordConfirmation: z.string(),
   email: z
     .string({
       required_error: 'Email is required',
@@ -80,19 +77,13 @@ const UserProvider: FC<Props> = ({ children, initialData }) => {
   const [data, setData] = useState<DataDocument | undefined>(initialData);
 
   const getMe = async () => {
-    const response = await fetcher<DataDocument>(
+    await fetcher<DataDocument>(
       `${process.env.NEXT_PUBLIC_API_ENDPOINT}/users/me`
-    );
-
-    console.log('data provider', response);
-
-    if (
-      (response && response.status === 200) ||
-      (response.data && response.data.status === 200)
-    ) {
-      setData(response);
-    }
-    // else push('/');
+    ).then((response) => {
+      if (response && response.status === 200) {
+        setData(response.data);
+      }
+    });
   };
 
   useEffect(() => {

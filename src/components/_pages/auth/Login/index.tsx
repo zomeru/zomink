@@ -38,27 +38,18 @@ const Login = () => {
         values
       )
         .then((res) => {
-          if (res.status === 200 || res.data.status === 200) {
-            setData(res);
+          if (res?.status === 200) {
+            setData(res.data);
             router.push('/');
           }
-          if (res?.data.status === 401) {
-            setLoginError(res?.data?.error || res?.data?.message);
-            setSubmitting(false);
+          if (res?.status === 401) {
+            setLoginError(res?.error || res?.message);
           } else {
-            setLoginError('Invalid email or password');
-            setSubmitting(false);
+            setLoginError("Something wen't wrong! Please try again later.");
           }
-
-          setSubmitting(false);
         })
-        .catch((err) => {
-          if (err?.data?.status === 401) {
-            setLoginError(err?.data?.error || err?.data?.message);
-          } else {
-            setLoginError('Something went wrong! Please try again later.');
-          }
-          setSubmitting(false);
+        .catch(() => {
+          setLoginError('Something went wrong! Please try again later.');
         });
 
       setSubmitting(false);
