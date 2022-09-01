@@ -46,7 +46,7 @@ const Login = () => {
             setLoginError(res?.data?.error || res?.data?.message);
             setSubmitting(false);
           } else {
-            setLoginError('Something went wrong! Please try again later.');
+            setLoginError('Invalid email or password');
             setSubmitting(false);
           }
 
