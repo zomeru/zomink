@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import { AiOutlineGoogle } from 'react-icons/ai';
 
-import axios from 'axios';
 import { Formik } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { useRouter } from 'next/router';
@@ -13,6 +12,7 @@ import {
   createUserSchema,
   useUser,
 } from '@/contexts/AuthContext';
+import { poster } from '@/utils/fetcher';
 
 const Register = () => {
   const router = useRouter();
@@ -33,34 +33,23 @@ const Register = () => {
     setSubmitting: (submit: boolean) => void
   ) => {
     setTimeout(async () => {
-      await axios
-        .post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/users`, values, {
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-        })
+      await poster<any>(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/users`, values)
         .then((res) => {
-          if (res.status === 200 || res.data.status === 200) {
-            setData(res);
+          if (res.status === 200) {
+            setData(res.data);
             router.push('/');
           }
-          if (res?.data.status === 401) {
-            setRegisterError(res?.data?.error || res?.data?.message);
+          if (res?.status === 401) {
+            setRegisterError(res?.error || res?.message);
           } else {
             setRegisterError('Something went wrong! Please try again later.');
           }
-
-          setSubmitting(false);
         })
-        .catch((err) => {
-          if (err?.data?.status === 401) {
-            setRegisterError(err?.data?.error || err?.data?.message);
-          } else {
-            setRegisterError('Something went wrong! Please try again later.');
-          }
-          setSubmitting(false);
+        .catch(() => {
+          setRegisterError('Something went wrong! Please try again later.');
         });
+
+      setSubmitting(false);
     }, 400);
   };
 
@@ -183,9 +172,13 @@ const Register = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                <p className='ml-1 text-left text-sm text-infoText'>
+                {/* // TODO: Re-enable */}
+                {/* <p className='ml-1 text-left text-sm text-infoText'>
                   At least one capital letter, at least one lower case letter,
                   at least one number, at least 8 characters
+                </p> */}
+                <p className='ml-1 text-left text-sm text-infoText'>
+                  At least 8 characters
                 </p>
               </div>
               <div>
@@ -204,7 +197,8 @@ const Register = () => {
                 />
                 <p
                   className={`duration-800 ml-1 text-center text-sm text-red-400 transition-all ease-in-out ${
-                    errors.passwordConfirmation
+                    errors.passwordConfirmation &&
+                    errors.passwordConfirmation !== 'Required'
                       ? 'opacity-1 h-full'
                       : ' h-0 opacity-0'
                   }`}

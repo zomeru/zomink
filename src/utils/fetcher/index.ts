@@ -26,19 +26,18 @@ const handleRequest = async (
       await refreshTokens();
       return await request();
     }
-    // return Promise.reject(error);
-
     return error.response;
   }
 };
 
 export const fetcher = async <T>(url: string): Promise<QueryResponse<T>> => {
   try {
-    const request = () => axios.get(url, { withCredentials: true });
+    const request = () =>
+      axios.get(url, { withCredentials: true }).then((res) => res);
     const { data } = await handleRequest(request);
     return data;
   } catch (error: any) {
-    return error.response;
+    return error.response.data;
   }
 };
 
@@ -49,18 +48,16 @@ export const poster = async <T>(
 ): Promise<QueryResponse<T>> => {
   try {
     const request = () =>
-      axios.post(url, payload, {
-        withCredentials: true,
-        // headers: {
-        //   'Content-Type': 'application/json',
-        //   Accept: 'application/json',
-        // },
-        ...options,
-      });
+      axios
+        .post(url, payload, {
+          withCredentials: true,
+          ...options,
+        })
+        .then((res) => res);
     const { data } = await handleRequest(request);
     return data;
   } catch (error: any) {
-    return error.response;
+    return error.response.data;
   }
 };
 
