@@ -17,9 +17,10 @@ const ShortenField = () => {
     setTimeout(() => {
       if (linkCheck(link)) {
         console.log('Link is valid');
-      } else {
+        return;
+      } 
         console.log('Link is not invalid');
-      }
+      
 
       NProgress.done();
     }, 2000);
