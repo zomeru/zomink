@@ -7,14 +7,19 @@ axios.defaults.withCredentials = true;
 
 export type QueryResponse<T> = T;
 
+const instance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+});
+
 export const refreshTokens = async () => {
-  return await axios.post(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/refresh`,
-    undefined,
-    {
-      withCredentials: true,
-    }
-  );
+  return await instance.post(`/auth/refresh`, undefined, {
+    withCredentials: true,
+  });
 };
 
 const handleRequest = async (
@@ -37,8 +42,7 @@ const handleRequest = async (
 
 export const fetcher = async <T>(url: string): Promise<QueryResponse<T>> => {
   try {
-    const request = () =>
-      axios.get(url, { withCredentials: true }).then((res) => res);
+    const request = () => instance.get(url).then((res) => res);
     const { data } = await handleRequest(request);
     return data;
   } catch (error: any) {
@@ -53,11 +57,8 @@ export const poster = async <T>(
 ): Promise<QueryResponse<T>> => {
   try {
     const request = () =>
-      axios
-        .post(url, payload, {
-          withCredentials: true,
-          ...options,
-        })
+      instance
+        .post(url, payload, options)
         .then((res) => {
           return res;
         })
