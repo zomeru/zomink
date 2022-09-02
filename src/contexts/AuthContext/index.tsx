@@ -46,8 +46,20 @@ export type CreateUserInput = TypeOf<typeof createUserSchema>;
 export type LoginUserInput = TypeOf<typeof loginUserSchema>;
 
 export interface DataDocument {
+  user: {
+    _id: string;
+    username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    verified: false;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+  };
+}
+export interface ResponseDocument {
   status: number;
-  data?: any;
+  data?: DataDocument;
   error?: string;
   message?: string;
 }
@@ -66,18 +78,17 @@ export function useUser() {
   return useContext(UserContextImpl);
 }
 
-interface Props {
-  children?: ReactNode;
-  initialData?: DataDocument;
+interface UserProviderProps {
+  children: ReactNode;
 }
 
-const UserProvider: FC<Props> = ({ children, initialData }) => {
+const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const { push } = useRouter();
 
-  const [data, setData] = useState<DataDocument | undefined>(initialData);
+  const [data, setData] = useState<DataDocument | undefined>();
 
   const getMe = async () => {
-    await fetcher<DataDocument>(
+    await fetcher<ResponseDocument>(
       `${process.env.NEXT_PUBLIC_API_ENDPOINT}/users/me`
     ).then((response) => {
       if (response && response.status === 200) {

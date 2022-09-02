@@ -27,33 +27,34 @@ const Login = () => {
     }
   }, [loginError]);
 
-  const onSubmit = (
+  const onSubmit = async (
     values: LoginUserInput,
     // eslint-disable-next-line no-unused-vars
     setSubmitting: (submit: boolean) => void
   ) => {
-    setTimeout(async () => {
-      await poster<DataDocument | any>(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`,
-        values
-      )
-        .then((res) => {
-          if (res?.status === 200) {
-            setData(res.data);
-            router.push('/');
-          }
-          if (res?.status === 401) {
-            setLoginError(res?.error || res?.message);
-          } else {
-            setLoginError("Something wen't wrong! Please try again later.");
-          }
-        })
-        .catch(() => {
+    await poster<DataDocument | any>(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`,
+      values
+    )
+      .then((res) => {
+        if (res?.status === 200) {
+          setData(res.data);
+          router.push('/');
+        } else if (res?.status === 401 || res?.status === 400) {
+          setLoginError(res?.error || res?.message);
+        } else {
+          setLoginError("Something wen't wrong! Please try again later.");
+        }
+      })
+      .catch((err) => {
+        if (err?.status === 401 || err?.status === 400) {
+          setLoginError(err?.error || err?.message);
+        } else {
           setLoginError('Something went wrong! Please try again later.');
-        });
+        }
+      });
 
-      setSubmitting(false);
-    }, 400);
+    setSubmitting(false);
   };
 
   return (

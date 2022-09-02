@@ -1,4 +1,5 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
+import { getError } from '../getError';
 
 /* eslint-disable no-return-await */
 
@@ -23,10 +24,14 @@ const handleRequest = async (
     return await request();
   } catch (error: any) {
     if (error?.response?.status === 401) {
-      await refreshTokens();
-      return await request();
+      try {
+        await refreshTokens();
+        return await request();
+      } catch (innerError: any) {
+        throw getError(innerError);
+      }
     }
-    return error.response;
+    return error;
   }
 };
 
@@ -37,7 +42,7 @@ export const fetcher = async <T>(url: string): Promise<QueryResponse<T>> => {
     const { data } = await handleRequest(request);
     return data;
   } catch (error: any) {
-    return error.response.data;
+    throw getError(error);
   }
 };
 
@@ -53,11 +58,18 @@ export const poster = async <T>(
           withCredentials: true,
           ...options,
         })
-        .then((res) => res);
+        .then((res) => {
+          return res;
+        })
+        .catch((postInnerError) => {
+          throw getError(postInnerError);
+        });
+    await request();
     const { data } = await handleRequest(request);
+
     return data;
   } catch (error: any) {
-    return error.response.data;
+    return error;
   }
 };
 
