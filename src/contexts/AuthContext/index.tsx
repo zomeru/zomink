@@ -89,7 +89,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const getMe = async () => {
     await fetcher<ResponseDocument>(
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/users/me`
+      `/users/me`
     ).then((response) => {
       if (response && response.status === 200) {
         setData(response.data);

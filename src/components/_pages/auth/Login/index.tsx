@@ -33,7 +33,7 @@ const Login = () => {
     setSubmitting: (submit: boolean) => void
   ) => {
     await poster<DataDocument | any>(
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`,
+      `/auth/login`,
       values
     )
       .then((res) => {
