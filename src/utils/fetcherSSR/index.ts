@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IncomingMessage, ServerResponse } from 'http';
 
 import { QueryResponse } from '../fetcher';
+import { getError } from '../getError';
 
 axios.defaults.withCredentials = true;
 
@@ -35,11 +36,15 @@ const handleRequest = async (
     return await request();
   } catch (error: any) {
     if (error?.response?.status === 401) {
-      await refreshTokens(req, res);
-      return await request();
+      try {
+        await refreshTokens(req, res);
+        return await request();
+      } catch (innerError: any) {
+        throw getError(innerError);
+      }
     }
 
-    throw error;
+    return error;
   }
 };
 
@@ -51,16 +56,23 @@ const fetchSSR = async (
 ): Promise<QueryResponse<any>> => {
   try {
     const request = () =>
-      axios.get(url, {
-        headers: {
-          cookie: req.headers.cookie!,
-        },
-      });
+      axios
+        .get(url, {
+          headers: {
+            cookie: req.headers.cookie!,
+          },
+        })
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          return err;
+        });
 
-    const data = await handleRequest(req, res, request);
+    const { data } = await handleRequest(req, res, request);
     return data;
   } catch (error: any) {
-    throw error;
+    return error;
   }
 };
 

@@ -27,30 +27,31 @@ const Register = () => {
     }
   }, [registerError]);
 
-  const onSubmit = (
+  const onSubmit = async (
     values: CreateUserInput,
     // eslint-disable-next-line no-unused-vars
     setSubmitting: (submit: boolean) => void
   ) => {
-    setTimeout(async () => {
-      await poster<any>(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/users`, values)
-        .then((res) => {
-          if (res.status === 200) {
-            setData(res.data);
-            router.push('/');
-          }
-          if (res?.status === 401) {
-            setRegisterError(res?.error || res?.message);
-          } else {
-            setRegisterError('Something went wrong! Please try again later.');
-          }
-        })
-        .catch(() => {
+    await poster<any>(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/users`, values)
+      .then((res) => {
+        if (res.status === 200) {
+          setData(res.data);
+          router.push('/');
+        } else if (res?.status === 401 || res?.status === 400) {
+          setRegisterError(res?.error || res?.message);
+        } else {
           setRegisterError('Something went wrong! Please try again later.');
-        });
+        }
+      })
+      .catch((err) => {
+        if (err?.status === 401 || err?.status === 400) {
+          setRegisterError(err?.error || err?.message);
+        } else {
+          setRegisterError('Something went wrong! Please try again later.');
+        }
+      });
 
-      setSubmitting(false);
-    }, 400);
+    setSubmitting(false);
   };
 
   return (
@@ -207,6 +208,14 @@ const Register = () => {
                 </p>
               </div>
             </div>
+
+            <p
+              className={`duration-800 text-red-400 transition-all ease-in-out ${
+                registerError ? 'opacity-1 h-full' : ' h-0 opacity-0'
+              }`}
+            >
+              {registerError}
+            </p>
 
             <button
               type='submit'
