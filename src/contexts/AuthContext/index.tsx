@@ -103,7 +103,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const logout = async () => {
     try {
-      await poster(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/logout`, {});
+      await poster(`/auth/logout`, {});
       setData(undefined);
       push('/');
     } catch (error) {
