@@ -32,7 +32,7 @@ const Register = () => {
     // eslint-disable-next-line no-unused-vars
     setSubmitting: (submit: boolean) => void
   ) => {
-    await poster<any>(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/users`, values)
+    await poster<any>(`/users`, values)
       .then((res) => {
         if (res.status === 200) {
           setData(res.data);
