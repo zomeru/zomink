@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-
 import { Layout } from '@/components';
 import {
   Banner,

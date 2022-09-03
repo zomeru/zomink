@@ -4,7 +4,6 @@ import { AiOutlineGoogle } from 'react-icons/ai';
 
 import { Formik } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { useRouter } from 'next/router';
 
 import { APP_NAME } from '@/components/constants';
 import {
@@ -15,7 +14,6 @@ import {
 import { poster } from '@/utils/fetcher';
 
 const Register = () => {
-  const router = useRouter();
   const { setData } = useUser();
   const [registerError, setRegisterError] = React.useState<string | null>(null);
 
@@ -36,7 +34,7 @@ const Register = () => {
       .then((res) => {
         if (res.status === 200) {
           setData(res.data);
-          router.push('/');
+          window.location.href = '/';
         } else if (res?.status === 401 || res?.status === 400) {
           setRegisterError(res?.error || res?.message);
         } else {

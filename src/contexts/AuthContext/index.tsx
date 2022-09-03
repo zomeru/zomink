@@ -87,10 +87,10 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const [data, setData] = useState<DataDocument | undefined>();
 
+  console.log('data', data);
+
   const getMe = async () => {
-    await fetcher<ResponseDocument>(
-      `/users/me`
-    ).then((response) => {
+    await fetcher<ResponseDocument>(`/users/me`).then((response) => {
       if (response && response.status === 200) {
         setData(response.data);
       }

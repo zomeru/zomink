@@ -10,12 +10,10 @@ import {
   useUser,
 } from '@/contexts/AuthContext';
 import { poster } from '@/utils/fetcher';
-import { useRouter } from 'next/router';
 import { Formik } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 const Login = () => {
-  const router = useRouter();
   const { setData } = useUser();
   const [loginError, setLoginError] = React.useState<string | null>(null);
 
@@ -32,14 +30,11 @@ const Login = () => {
     // eslint-disable-next-line no-unused-vars
     setSubmitting: (submit: boolean) => void
   ) => {
-    await poster<DataDocument | any>(
-      `/auth/login`,
-      values
-    )
+    await poster<DataDocument | any>(`/auth/login`, values)
       .then((res) => {
         if (res?.status === 200) {
           setData(res.data);
-          router.push('/');
+          window.location.href = '/';
         } else if (res?.status === 401 || res?.status === 400) {
           setLoginError(res?.error || res?.message);
         } else {

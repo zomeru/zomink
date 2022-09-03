@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -14,9 +15,7 @@ const Navbar = () => {
     <header className='padding-sides w-auto'>
       <nav className='max-width  flex h-[100px] w-full items-center justify-between text-primary-500'>
         <Link href='/' passHref>
-          <a href='/'>
-            <Logo />
-          </a>
+          <Logo />
         </Link>
         <div className='flex items-center space-x-[30px]'>
           {NAV_LINKS.map(({ name, link }) => {
