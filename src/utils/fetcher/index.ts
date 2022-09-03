@@ -4,6 +4,7 @@ import { getError } from '../getError';
 /* eslint-disable no-return-await */
 
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 export type QueryResponse<T> = T;
 
