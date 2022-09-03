@@ -66,9 +66,7 @@ export const poster = async <T>(
         .catch((postInnerError) => {
           throw getError(postInnerError);
         });
-    await request();
     const { data } = await handleRequest(request);
-
     return data;
   } catch (error: any) {
     return error;
