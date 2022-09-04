@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
-import { fetcher } from '@/utils/fetcher';
 import { useRouter } from 'next/router';
+import fetcher from '@/utils/fetcher';
 
 const Alias = ({ link }: { link: string }) => {
   const [requestMade, setRequestMade] = React.useState(false);
@@ -24,23 +24,27 @@ const Alias = ({ link }: { link: string }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { alias } = context.params as { alias: string };
-  const { link } = await fetcher<{
-    link: string;
-  }>(`/urls/${alias}`);
 
-  if (!link) {
+  const response: {
+    status: string;
+    link: string;
+  } = await fetcher(`/urls/${alias}`, 'GET');
+
+  if (response.status === 'success') {
     return {
-      props: {},
+      props: {
+        link: response.link,
+      },
+      redirect: {
+        destination: response.link,
+        statusCode: 301,
+      },
     };
   }
 
   return {
     props: {
-      link,
-    },
-    redirect: {
-      destination: link,
-      statusCode: 301,
+      link: null,
     },
   };
 };
