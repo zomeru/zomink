@@ -100,9 +100,7 @@ const Register = () => {
                   type='text'
                   name='username'
                   className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                    errors.username &&
-                    touched.username &&
-                    'border-2 border-red-400'
+                    errors.username && touched.username && 'input-error'
                   }`}
                   placeholder='Username'
                   value={values.username}
@@ -118,7 +116,7 @@ const Register = () => {
                 type='email'
                 name='email'
                 className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                  errors.email && touched.email && 'border-2 border-red-400'
+                  errors.email && touched.email && 'input-error'
                 }`}
                 placeholder='Email'
                 value={values.email}
@@ -129,9 +127,7 @@ const Register = () => {
                 type='text'
                 name='firstName'
                 className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                  errors.firstName &&
-                  touched.firstName &&
-                  'border-2 border-red-400'
+                  errors.firstName && touched.firstName && 'input-error'
                 }`}
                 placeholder='First name'
                 value={values.firstName}
@@ -142,9 +138,7 @@ const Register = () => {
                 type='text'
                 name='lastName'
                 className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                  errors.lastName &&
-                  touched.lastName &&
-                  'border-2 border-red-400'
+                  errors.lastName && touched.lastName && 'input-error'
                 }`}
                 placeholder='Last name'
                 value={values.lastName}
@@ -156,9 +150,7 @@ const Register = () => {
                   type='password'
                   name='password'
                   className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                    errors.password &&
-                    touched.password &&
-                    'border-2 border-red-400'
+                    errors.password && touched.password && 'input-error'
                   }`}
                   placeholder='Password'
                   value={values.password}
@@ -181,7 +173,7 @@ const Register = () => {
                   className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
                     errors.passwordConfirmation &&
                     touched.passwordConfirmation &&
-                    'border-2 border-red-400'
+                    'input-error'
                   }`}
                   placeholder='Confirm password'
                   value={values.passwordConfirmation}
@@ -213,8 +205,7 @@ const Register = () => {
               type='submit'
               disabled={isSubmitting}
               className={`btn-primary-lg ${
-                isSubmitting &&
-                'cursor-not-allowed bg-neutral-600 hover:bg-neutral-600'
+                isSubmitting && 'btn-primary-submitting '
               }`}
             >
               Create an account

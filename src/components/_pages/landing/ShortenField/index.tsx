@@ -1,29 +1,80 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import NProgress from 'nprogress';
+import { Formik } from 'formik';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { APP_NAME } from '@/components/constants';
-import linkCheck from '@/utils/linkCheck/linkCheck';
+// import { linkValid } from '@/utils/regEx';
+import { CreateShortURLInput, URLDocument } from '@/types/url';
+import { createShortURLSchema } from '@/schema/url';
+import shortenLink from '@/utils/shortenLink';
+import { useUser } from '@/contexts/AuthContext';
+import useShortenURLs, { LOCAL_LINKS_KEY } from '@/hooks/useShortenURLs';
+import { ResponseDocument } from '@/types/response';
+import TextError from '@/components/TextError';
+import ShortenedURLs from '../ShortenedURLs';
 
 const ShortenField = () => {
-  const [link, setLink] = useState('');
-  const [alias, setAlias] = useState('');
+  const { user } = useUser();
+  const { shortenedURLs, setShortenedURLs } = useShortenURLs(user);
 
-  const handleShortenLink = async (e: React.FormEvent) => {
-    e.preventDefault();
+  console.log('shortenedURLs', shortenedURLs);
+
+  const [shortenError, setShortenError] = useState<string | undefined>();
+
+  console.log('shortenError', shortenError);
+
+  useEffect(() => {
+    if (shortenError) {
+      setTimeout(() => {
+        setShortenError(undefined);
+      }, 10000);
+    }
+  }, [shortenError]);
+
+  const onShorten = async (
+    values: CreateShortURLInput,
+    resetForm: () => void
+  ) => {
+    setShortenError(undefined);
     NProgress.configure({ showSpinner: false });
     NProgress.start();
 
-    setTimeout(() => {
-      if (linkCheck(link)) {
-        console.log('Link is valid');
-        return;
-      } 
-        console.log('Link is not invalid');
-      
+    const newValues: CreateShortURLInput = {
+      ...values,
+      user: user?._id,
+    };
 
-      NProgress.done();
-    }, 2000);
+    const response: ResponseDocument = await shortenLink(newValues);
+
+    if (response.status === 'success') {
+      setShortenedURLs((prev) => [
+        ...prev,
+        response?.data?.urlData as URLDocument,
+      ]);
+
+      if (!user) {
+        localStorage.setItem(
+          LOCAL_LINKS_KEY,
+          JSON.stringify([
+            ...shortenedURLs,
+            response?.data?.urlData as URLDocument,
+          ])
+        );
+      }
+
+      resetForm();
+    } else if (
+      response.status === 'error' &&
+      response.statusCode === 400
+    ) {
+      setShortenError(response.message);
+    } else {
+      setShortenError('Something went wrong! Please try again later.');
+    }
+
+    NProgress.done();
   };
 
   return (
@@ -31,50 +82,100 @@ const ShortenField = () => {
       id='shortener'
       className='padding-sides my-[20px] w-full bg-primary-500 py-[35px] 2xl:my-[50px]'
     >
-      <form
-        className='max-width my-auto h-full space-y-3 '
-        onSubmit={handleShortenLink}
+      <Formik
+        initialValues={{ link: '', alias: '', user: '' }}
+        validationSchema={toFormikValidationSchema(createShortURLSchema)}
+        onSubmit={(values, { setSubmitting, resetForm }) => {
+          onShorten(values, resetForm);
+
+          setSubmitting(false);
+        }}
       >
-        <div className='flex w-full space-x-3'>
-          <input
-            type='text'
-            className='w-full rounded-lg px-5 outline-none'
-            placeholder='Paste your link here'
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
-          />
-          <input
-            type='text'
-            className='w-[250px] rounded-lg px-5 outline-none'
-            placeholder='Alias (optional)'
-            value={alias}
-            onChange={(e) => setAlias(e.target.value)}
-          />
-          <button type='submit' className='btn-primary-lg'>
-            Shorten
-          </button>
-        </div>
-        <p className='text-center text-sm font-light text-white'>
-          By clicking Shorten, you are agreeing to {APP_NAME}&apos;s{' '}
-          <strong>
-            <Link href='/pages/terms-of-service'>
-              <a className='simple-links underline hover:text-primary-100'>
-                Terms of Service
-              </a>
-            </Link>
-          </strong>
-          ,{' '}
-          <strong>
-            {' '}
-            <Link href='/pages/privacy-policy'>
-              <a className='simple-links underline hover:text-primary-100'>
-                Privacy Policy
-              </a>
-            </Link>
-          </strong>
-          , and <strong>Use of Cookies</strong>.
-        </p>
-      </form>
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+        }) => (
+          <form
+            className={`max-width my-auto h-full  ${
+              shortenedURLs.length > 0 ? 'space-y-5' : 'space-y-3'
+            }`}
+            onSubmit={handleSubmit}
+          >
+            <div className='flex w-full space-x-3'>
+              <input
+                type='text'
+                name='link'
+                className={`outline-none' placeholder='Paste your link here
+                w-full rounded-lg px-5 text-sky-600 ${
+                  errors.link && touched.link && 'input-error'
+                }`}
+                value={values.link}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <input
+                type='text'
+                name='alias'
+                className='w-[250px] rounded-lg px-5 outline-none'
+                placeholder='Alias (optional)'
+                value={values.alias}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <button
+                disabled={isSubmitting}
+                type='submit'
+                className={`btn-primary-lg ${
+                  isSubmitting && 'btn-primary-submitting'
+                }`}
+              >
+                Shorten
+              </button>
+            </div>
+            <p className='text-center text-sm font-light text-white'>
+              By clicking Shorten, you are agreeing to {APP_NAME}&apos;s{' '}
+              <strong>
+                <Link href='/pages/terms-of-service'>
+                  <a className='simple-links underline hover:text-primary-100'>
+                    Terms of Service
+                  </a>
+                </Link>
+              </strong>
+              ,{' '}
+              <strong>
+                {' '}
+                <Link href='/pages/privacy-policy'>
+                  <a className='simple-links underline hover:text-primary-100'>
+                    Privacy Policy
+                  </a>
+                </Link>
+              </strong>
+              , and <strong>Use of Cookies</strong>.
+            </p>
+            <TextError
+              showError={
+                !shortenError && errors.link && values.link.length > 0
+              }
+              errorText={errors.link!}
+              className='mb-[20px]'
+            />
+
+            <TextError
+              showError={shortenError}
+              errorText={shortenError!}
+            />
+            {shortenError && errors.link && shortenedURLs.length > 0 && (
+              <div className='mt-[10px] h-[1px]' />
+            )}
+            <ShortenedURLs urls={shortenedURLs} />
+          </form>
+        )}
+      </Formik>
     </section>
   );
 };

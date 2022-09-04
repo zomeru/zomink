@@ -1,7 +1,8 @@
+import { Maintenance } from '@/components';
 import React from 'react';
 
 const App = () => {
-  return <div>App</div>;
+  return <Maintenance />;
 };
 
 export default App;

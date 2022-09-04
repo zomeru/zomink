@@ -92,7 +92,7 @@ const Login = () => {
                 type='text'
                 name='email'
                 className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                  errors.email && touched.email && 'border-2 border-red-400'
+                  errors.email && touched.email && 'input-error'
                 }`}
                 placeholder='Email or Username'
                 value={values.email}
@@ -104,9 +104,7 @@ const Login = () => {
                 type='password'
                 name='password'
                 className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                  errors.password &&
-                  touched.password &&
-                  'border-2 border-red-400'
+                  errors.password && touched.password && 'input-error'
                 }`}
                 placeholder='Password'
                 value={values.password}
@@ -127,8 +125,7 @@ const Login = () => {
               disabled={isSubmitting}
               type='submit'
               className={`btn-primary-lg ${
-                isSubmitting &&
-                'cursor-not-allowed bg-neutral-600 hover:bg-neutral-600'
+                isSubmitting && 'btn-primary-submitting '
               }`}
             >
               Log in

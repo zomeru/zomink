@@ -1,7 +1,9 @@
 import React from 'react';
 
+import { Maintenance } from '@/components';
+
 const Contact = () => {
-  return <div>Contact</div>;
+  return <Maintenance />;
 };
 
 export default Contact;
