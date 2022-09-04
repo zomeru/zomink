@@ -1,16 +1,21 @@
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+
 import { useUser } from '@/contexts/AuthContext';
 import { URLDocument } from '@/types/url';
-import Link from 'next/link';
-import React, { useMemo } from 'react';
 
 const UrlComponent = ({
-  url,
+  onCopy,
   shortURL,
   showSeparator,
+  url,
+  copied,
 }: {
+  onCopy: () => void;
   url: string;
   shortURL: string;
   showSeparator: boolean;
+  copied: boolean;
 }) => {
   return (
     <div className='space-y-5'>
@@ -28,8 +33,13 @@ const UrlComponent = ({
             >
               {shortURL}
             </a>
-            <button type='button' className='btn-secondary h-[35]'>
-              Copy
+            <button
+              onClick={onCopy}
+              disabled={copied}
+              type='button'
+              className='btn-secondary h-[35]'
+            >
+              {copied ? 'Copied' : 'Copy'}
             </button>
           </div>
         </div>
@@ -40,19 +50,55 @@ const UrlComponent = ({
 };
 
 const ShortenedURLs = ({ urls }: { urls: Array<URLDocument> }) => {
+  const [urlCopied, setUrlCopied] = useState<string | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    let timeout: any;
+    if (urlCopied) {
+      timeout = setTimeout(() => {
+        setUrlCopied(undefined);
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [urlCopied]);
+
   const { user } = useUser();
 
   if (!urls || urls.length === 0) return null;
 
-  const firstItem = useMemo(() => urls[0], [urls]);
-  const otherItems = useMemo(
-    () => (urls.length > 3 ? urls.slice(1, 3) : urls.slice(1)),
-    [urls]
-  );
+  const reversedUrls = [...urls].reverse();
+  const firstItem = reversedUrls[0];
+  const otherItems =
+    reversedUrls.length > 3
+      ? reversedUrls.slice(1, 3)
+      : reversedUrls.slice(1);
+
+  const copyToClipBoard = async (url: string, id: string) => {
+    try {
+      setUrlCopied(undefined);
+      await navigator.clipboard.writeText(url);
+
+      setUrlCopied(id);
+    } catch (err) {
+      setUrlCopied(undefined);
+    }
+  };
 
   return (
     <div className='mt-4 w-full rounded-lg bg-white p-[20px]'>
       <UrlComponent
+        onCopy={() => {
+          copyToClipBoard(
+            `https://zom.ink/${firstItem.alias}`,
+            firstItem._id
+          );
+        }}
+        copied={urlCopied === firstItem._id}
         shortURL={`https://zom.ink/${firstItem.alias}`}
         url={firstItem.link}
         showSeparator
@@ -60,6 +106,10 @@ const ShortenedURLs = ({ urls }: { urls: Array<URLDocument> }) => {
       {otherItems.map((item) => {
         return (
           <UrlComponent
+            onCopy={() => {
+              copyToClipBoard(`https://zom.ink/${item.alias}`, item._id);
+            }}
+            copied={urlCopied === item._id}
             key={item._id}
             shortURL={`https://zom.ink/${item.alias}`}
             url={item.link}
