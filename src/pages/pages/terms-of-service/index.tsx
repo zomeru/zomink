@@ -1,7 +1,9 @@
 import React from 'react';
 
+import { Maintenance } from '@/components';
+
 const TermsOfService = () => {
-  return <div>TermsOfService</div>;
+  return <Maintenance />;
 };
 
 export default TermsOfService;

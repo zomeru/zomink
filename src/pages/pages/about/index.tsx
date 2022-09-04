@@ -1,7 +1,9 @@
 import React from 'react';
 
+import { Maintenance } from '@/components';
+
 const About = () => {
-  return <div>About</div>;
+  return <Maintenance />;
 };
 
 export default About;

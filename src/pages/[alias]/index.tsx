@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+
 import fetcher from '@/utils/fetcher';
+import { Maintenance } from '@/components';
 
 const Alias = ({ link }: { link: string }) => {
   const [requestMade, setRequestMade] = React.useState(false);
@@ -16,7 +18,13 @@ const Alias = ({ link }: { link: string }) => {
   }, [link]);
 
   if (requestMade) {
-    return <div>Unable to find URL to redirect to.</div>;
+    return (
+      <Maintenance>
+        <h1 className='mb-4 text-2xl font-medium'>
+          Unable to find URL to redirect to
+        </h1>
+      </Maintenance>
+    );
   }
 
   return null;
@@ -28,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const response: {
     status: string;
     link: string;
-  } = await fetcher(`/urls/${alias}`, 'GET');
+  } = await fetcher(`/${alias}/urls`, 'GET');
 
   if (response.status === 'success') {
     return {

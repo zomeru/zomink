@@ -1,7 +1,9 @@
 import React from 'react';
 
+import { Maintenance } from '@/components';
+
 const MyUrls = () => {
-  return <div>MyUrls</div>;
+  return <Maintenance />;
 };
 
 export default MyUrls;

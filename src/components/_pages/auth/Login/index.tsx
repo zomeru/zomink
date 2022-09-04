@@ -1,21 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
 import { AiOutlineGoogle } from 'react-icons/ai';
-import Router from 'next/router';
 import { Formik } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { APP_NAME } from '@/components/constants';
-import {
-  LoginUserInput,
-  loginUserSchema,
-  ResponseDocument,
-  useUser,
-} from '@/contexts/AuthContext';
-import fetcher from '@/utils/fetcher';
+import { useUser } from '@/contexts/AuthContext';
+import { LoginUserInput } from '@/types/user';
+import { loginUserSchema } from '@/schema/user';
 
 const Login = () => {
-  const { setUser } = useUser();
+  const { login } = useUser();
   const [loginError, setLoginError] = React.useState<string | undefined>();
 
   React.useEffect(() => {
@@ -32,22 +27,18 @@ const Login = () => {
     setSubmitting: (submit: boolean) => void
   ) => {
     setLoginError(undefined);
-    const res: ResponseDocument = await fetcher<LoginUserInput>(
-      '/auth/login',
-      'POST',
-      values
-    );
 
-    if (res.status === 'success') {
-      setUser(res?.data?.user);
-      Router.push('/');
-    } else if (
-      res.status === 'error' &&
-      (res.statusCode === 401 || res.statusCode === 400)
-    ) {
-      setLoginError(res.message);
-    } else {
-      setLoginError('Something went wrong! Please try again later.');
+    const res = await login(values);
+
+    if (res) {
+      if (
+        res.status === 'error' &&
+        (res.statusCode === 401 || res.statusCode === 400)
+      ) {
+        setLoginError(res.message);
+      } else {
+        setLoginError('Something went wrong! Please try again later.');
+      }
     }
 
     setSubmitting(false);
@@ -101,7 +92,7 @@ const Login = () => {
                 type='text'
                 name='email'
                 className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                  errors.email && touched.email && 'border-2 border-red-400'
+                  errors.email && touched.email && 'input-error'
                 }`}
                 placeholder='Email or Username'
                 value={values.email}
@@ -113,9 +104,7 @@ const Login = () => {
                 type='password'
                 name='password'
                 className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                  errors.password &&
-                  touched.password &&
-                  'border-2 border-red-400'
+                  errors.password && touched.password && 'input-error'
                 }`}
                 placeholder='Password'
                 value={values.password}
@@ -136,8 +125,7 @@ const Login = () => {
               disabled={isSubmitting}
               type='submit'
               className={`btn-primary-lg ${
-                isSubmitting &&
-                'cursor-not-allowed bg-neutral-600 hover:bg-neutral-600'
+                isSubmitting && 'btn-primary-submitting '
               }`}
             >
               Log in

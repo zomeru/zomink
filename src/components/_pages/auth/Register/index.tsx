@@ -3,19 +3,14 @@ import Link from 'next/link';
 import { AiOutlineGoogle } from 'react-icons/ai';
 import { Formik } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import Router from 'next/router';
 
 import { APP_NAME } from '@/components/constants';
-import {
-  CreateUserInput,
-  createUserSchema,
-  ResponseDocument,
-  useUser,
-} from '@/contexts/AuthContext';
-import fetcher from '@/utils/fetcher';
+import { useUser } from '@/contexts/AuthContext';
+import { createUserSchema } from '@/schema/user';
+import { CreateUserInput } from '@/types/user';
 
 const Register = () => {
-  const { setUser } = useUser();
+  const { register } = useUser();
   const [registerError, setRegisterError] = React.useState<
     string | undefined
   >();
@@ -34,22 +29,18 @@ const Register = () => {
     setSubmitting: (submit: boolean) => void
   ) => {
     setRegisterError(undefined);
-    const res: ResponseDocument = await fetcher<CreateUserInput>(
-      '/users',
-      'POST',
-      values
-    );
 
-    if (res.status === 'success') {
-      setUser(res?.data?.user);
-      Router.push('/');
-    } else if (
-      res.status === 'error' &&
-      (res.statusCode === 401 || res.statusCode === 400)
-    ) {
-      setRegisterError(res.message);
-    } else {
-      setRegisterError('Something went wrong! Please try again later.');
+    const res = await register(values);
+
+    if (res) {
+      if (
+        res.status === 'error' &&
+        (res.statusCode === 401 || res.statusCode === 400)
+      ) {
+        setRegisterError(res.message);
+      } else {
+        setRegisterError('Something went wrong! Please try again later.');
+      }
     }
 
     setSubmitting(false);
@@ -109,9 +100,7 @@ const Register = () => {
                   type='text'
                   name='username'
                   className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                    errors.username &&
-                    touched.username &&
-                    'border-2 border-red-400'
+                    errors.username && touched.username && 'input-error'
                   }`}
                   placeholder='Username'
                   value={values.username}
@@ -127,7 +116,7 @@ const Register = () => {
                 type='email'
                 name='email'
                 className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                  errors.email && touched.email && 'border-2 border-red-400'
+                  errors.email && touched.email && 'input-error'
                 }`}
                 placeholder='Email'
                 value={values.email}
@@ -138,9 +127,7 @@ const Register = () => {
                 type='text'
                 name='firstName'
                 className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                  errors.firstName &&
-                  touched.firstName &&
-                  'border-2 border-red-400'
+                  errors.firstName && touched.firstName && 'input-error'
                 }`}
                 placeholder='First name'
                 value={values.firstName}
@@ -151,9 +138,7 @@ const Register = () => {
                 type='text'
                 name='lastName'
                 className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                  errors.lastName &&
-                  touched.lastName &&
-                  'border-2 border-red-400'
+                  errors.lastName && touched.lastName && 'input-error'
                 }`}
                 placeholder='Last name'
                 value={values.lastName}
@@ -165,9 +150,7 @@ const Register = () => {
                   type='password'
                   name='password'
                   className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
-                    errors.password &&
-                    touched.password &&
-                    'border-2 border-red-400'
+                    errors.password && touched.password && 'input-error'
                   }`}
                   placeholder='Password'
                   value={values.password}
@@ -190,7 +173,7 @@ const Register = () => {
                   className={`h-[55px] w-full rounded-lg border border-bGray p-5 outline-none ${
                     errors.passwordConfirmation &&
                     touched.passwordConfirmation &&
-                    'border-2 border-red-400'
+                    'input-error'
                   }`}
                   placeholder='Confirm password'
                   value={values.passwordConfirmation}
@@ -222,8 +205,7 @@ const Register = () => {
               type='submit'
               disabled={isSubmitting}
               className={`btn-primary-lg ${
-                isSubmitting &&
-                'cursor-not-allowed bg-neutral-600 hover:bg-neutral-600'
+                isSubmitting && 'btn-primary-submitting '
               }`}
             >
               Create an account

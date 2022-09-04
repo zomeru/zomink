@@ -45,6 +45,7 @@
     "react/function-component-definition": "off",
     "class-methods-use-this": ["off"],
     "max-classes-per-file": ["off"],
+    "consistent-return": "off",
     "react/jsx-filename-extension": [
       2,
       {
