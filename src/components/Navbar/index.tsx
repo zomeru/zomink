@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -9,20 +8,22 @@ import Logo from '../Logo';
 
 const Navbar = () => {
   const { push } = useRouter();
-  const { data, logout } = useUser();
+  const { user, logout } = useUser();
 
   return (
     <header className='padding-sides w-auto'>
       <nav className='max-width  flex h-[100px] w-full items-center justify-between text-primary-500'>
         <Link href='/' passHref>
-          <Logo />
+          <a>
+            <Logo />
+          </a>
         </Link>
         <div className='flex items-center space-x-[30px]'>
           {NAV_LINKS.map(({ name, link }) => {
-            if (name === 'Log in' && data?.user) {
+            if (name === 'Log in' && user) {
               return null;
             }
-            const newName = data?.user && name === 'My URLs' ? 'App' : name;
+            const newName: string = user && name === 'My URLs' ? 'App' : name;
 
             return (
               <Link
@@ -45,14 +46,14 @@ const Navbar = () => {
             type='button'
             className='btn-primary'
             onClick={() => {
-              if (data?.user) {
+              if (user) {
                 logout();
               } else {
                 push('/auth/register');
               }
             }}
           >
-            {data?.user ? 'Log out' : 'Sign up'}
+            {user ? 'Log out' : 'Sign up'}
           </button>
         </div>
       </nav>
@@ -61,3 +62,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+// eslint-disable-next-line no-unused-vars

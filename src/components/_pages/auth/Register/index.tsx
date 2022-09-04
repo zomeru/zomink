@@ -1,26 +1,29 @@
 import React from 'react';
 import Link from 'next/link';
 import { AiOutlineGoogle } from 'react-icons/ai';
-
 import { Formik } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+import Router from 'next/router';
 
 import { APP_NAME } from '@/components/constants';
 import {
   CreateUserInput,
   createUserSchema,
+  ResponseDocument,
   useUser,
 } from '@/contexts/AuthContext';
-import { poster } from '@/utils/fetcher';
+import fetcher from '@/utils/fetcher';
 
 const Register = () => {
-  const { setData } = useUser();
-  const [registerError, setRegisterError] = React.useState<string | null>(null);
+  const { setUser } = useUser();
+  const [registerError, setRegisterError] = React.useState<
+    string | undefined
+  >();
 
   React.useEffect(() => {
     if (registerError) {
       setTimeout(() => {
-        setRegisterError(null);
+        setRegisterError(undefined);
       }, 5000);
     }
   }, [registerError]);
@@ -30,24 +33,24 @@ const Register = () => {
     // eslint-disable-next-line no-unused-vars
     setSubmitting: (submit: boolean) => void
   ) => {
-    await poster<any>(`/users`, values)
-      .then((res) => {
-        if (res.status === 200) {
-          setData(res.data);
-          window.location.href = '/';
-        } else if (res?.status === 401 || res?.status === 400) {
-          setRegisterError(res?.error || res?.message);
-        } else {
-          setRegisterError('Something went wrong! Please try again later.');
-        }
-      })
-      .catch((err) => {
-        if (err?.status === 401 || err?.status === 400) {
-          setRegisterError(err?.error || err?.message);
-        } else {
-          setRegisterError('Something went wrong! Please try again later.');
-        }
-      });
+    setRegisterError(undefined);
+    const res: ResponseDocument = await fetcher<CreateUserInput>(
+      '/users',
+      'POST',
+      values
+    );
+
+    if (res.status === 'success') {
+      setUser(res?.data?.user);
+      Router.push('/');
+    } else if (
+      res.status === 'error' &&
+      (res.statusCode === 401 || res.statusCode === 400)
+    ) {
+      setRegisterError(res.message);
+    } else {
+      setRegisterError('Something went wrong! Please try again later.');
+    }
 
     setSubmitting(false);
   };

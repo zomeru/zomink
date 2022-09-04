@@ -7,10 +7,10 @@ import {
   ReactNode,
   useMemo,
 } from 'react';
-import { useRouter } from 'next/router';
+import Router from 'next/router';
 import { object, TypeOf, z } from 'zod';
 
-import { fetcher, poster } from '@/utils/fetcher';
+import fetcher from '@/utils/fetcher';
 
 export const loginUserSchema = object({
   email: z
@@ -45,7 +45,7 @@ export const createUserSchema = object({
 export type CreateUserInput = TypeOf<typeof createUserSchema>;
 export type LoginUserInput = TypeOf<typeof loginUserSchema>;
 
-export interface DataDocument {
+export interface UserDocument {
   user: {
     _id: string;
     username: string;
@@ -58,16 +58,18 @@ export interface DataDocument {
   };
 }
 export interface ResponseDocument {
-  status: number;
-  data?: DataDocument;
-  error?: string;
+  status: 'error' | 'success';
+  statusCode: number;
+  data?: {
+    user: UserDocument;
+  };
   message?: string;
 }
 
 export interface UserContext {
-  data: any;
+  user?: UserDocument;
   /* eslint-disable no-unused-vars */
-  setData: (data?: DataDocument) => void;
+  setUser: (data?: UserDocument) => void;
   /* eslint-enable no-unused-vars */
   logout: () => void;
 }
@@ -83,35 +85,29 @@ interface UserProviderProps {
 }
 
 const UserProvider: FC<UserProviderProps> = ({ children }) => {
-  const { push } = useRouter();
-
-  const [data, setData] = useState<DataDocument | undefined>();
+  const [user, setUser] = useState<UserDocument | undefined>();
 
   const getMe = async () => {
-    await fetcher<ResponseDocument>(`/users/me`).then((response) => {
-      if (response && response.status === 200) {
-        setData(response.data);
-      }
-    });
-  };
+    const response = await fetcher('/users/me', 'GET');
 
-  useEffect(() => {
-    if (!data) getMe();
-  }, [data]);
-
-  const logout = async () => {
-    try {
-      await poster(`/auth/logout`, {});
-      setData(undefined);
-      push('/');
-    } catch (error) {
-      console.log('logout error', error);
+    if (response?.status === 'success') {
+      setUser(response.data.user);
     }
   };
 
+  useEffect(() => {
+    if (!user) getMe();
+  }, [user]);
+
+  const logout = async () => {
+    await fetcher('/users/logout', 'POST');
+    setUser(undefined);
+    Router.push('/');
+  };
+
   const value = useMemo(
-    () => ({ data, setData, logout }),
-    [data, setData, logout]
+    () => ({ user, setUser, logout }),
+    [user, setUser, logout]
   );
 
   return (

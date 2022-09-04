@@ -2,16 +2,26 @@
 import axios, { AxiosResponse } from 'axios';
 import { IncomingMessage, ServerResponse } from 'http';
 
-import { QueryResponse } from '../fetcher';
+import { QueryResponse } from '../oldFetcher';
 import { getError } from '../getError';
 
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
+
+const instance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+});
 
 export const refreshTokens = async (
   req: IncomingMessage,
   res: ServerResponse
 ) => {
-  const response = await axios.post(
+  const response = await instance.post(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/refresh`,
     undefined,
     {
@@ -44,30 +54,23 @@ const handleRequest = async (
       }
     }
 
-    return error;
+    throw getError(error);
   }
 };
 
 /* eslint-disable no-useless-catch */
-const fetchSSR = async (
+const fetchSSR = async <T>(
   req: IncomingMessage,
   res: ServerResponse,
   url: string
-): Promise<QueryResponse<any>> => {
+): Promise<QueryResponse<T>> => {
   try {
     const request = () =>
-      axios
-        .get(url, {
-          headers: {
-            cookie: req.headers.cookie!,
-          },
-        })
-        .then((res) => {
-          return res;
-        })
-        .catch((err) => {
-          return err;
-        });
+      instance.get(url, {
+        headers: {
+          cookie: req.headers.cookie!,
+        },
+      });
 
     const { data } = await handleRequest(req, res, request);
     return data;

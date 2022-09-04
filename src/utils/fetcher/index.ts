@@ -1,31 +1,16 @@
-import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
-import { getError } from '../getError';
+const headers = new Headers();
+headers.append('Content-Type', 'application/json');
+headers.append('Accept', 'application/json');
+headers.append('credentials', 'include');
 
-/* eslint-disable no-return-await */
+type MethodType = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS';
 
-axios.defaults.withCredentials = true;
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
-
-export type QueryResponse<T> = T;
-
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
-});
-
-export const refreshTokens = async () => {
-  return await instance.post(`/auth/refresh`, undefined, {
-    withCredentials: true,
-  });
+const refreshTokens = async () => {
+  const res = await fetcher(`/auth/refresh`, 'POST');
+  return res;
 };
 
-const handleRequest = async (
-  request: () => Promise<AxiosResponse>
-): Promise<AxiosResponse> => {
+const handleRequest = async (request: () => any) => {
   try {
     return await request();
   } catch (error: any) {
@@ -34,43 +19,42 @@ const handleRequest = async (
         await refreshTokens();
         return await request();
       } catch (innerError: any) {
-        throw getError(innerError);
+        return innerError;
       }
     }
     return error;
   }
 };
 
-export const fetcher = async <T>(url: string): Promise<QueryResponse<T>> => {
-  try {
-    const request = () => instance.get(url).then((res) => res);
-    const { data } = await handleRequest(request);
-    return data;
-  } catch (error: any) {
-    throw getError(error);
-  }
-};
-
-export const poster = async <T>(
+export const fetcher = async <T>(
   url: string,
-  payload?: unknown,
-  options?: AxiosRequestConfig
-): Promise<QueryResponse<T>> => {
+  method: MethodType,
+  payload?: T
+) => {
   try {
-    const request = () =>
-      instance
-        .post(url, payload, options)
-        .then((res) => {
-          return res;
-        })
-        .catch((postInnerError) => {
-          throw getError(postInnerError);
-        });
-    const { data } = await handleRequest(request);
+    const response = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_ENDPOINT}${url}`,
+          {
+            method,
+            headers,
+            credentials: 'include',
+            body: JSON.stringify(payload),
+          }
+        );
+
+        return res.json();
+      } catch (error) {
+        return error;
+      }
+    };
+
+    const data = await handleRequest(response);
     return data;
-  } catch (error: any) {
+  } catch (error) {
     return error;
   }
 };
 
-/* eslint-enable no-return-await */
+export default fetcher;

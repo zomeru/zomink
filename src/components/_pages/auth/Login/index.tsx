@@ -1,26 +1,27 @@
 import React from 'react';
 import Link from 'next/link';
 import { AiOutlineGoogle } from 'react-icons/ai';
-
-import { APP_NAME } from '@/components/constants';
-import {
-  DataDocument,
-  LoginUserInput,
-  loginUserSchema,
-  useUser,
-} from '@/contexts/AuthContext';
-import { poster } from '@/utils/fetcher';
+import Router from 'next/router';
 import { Formik } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
+import { APP_NAME } from '@/components/constants';
+import {
+  LoginUserInput,
+  loginUserSchema,
+  ResponseDocument,
+  useUser,
+} from '@/contexts/AuthContext';
+import fetcher from '@/utils/fetcher';
+
 const Login = () => {
-  const { setData } = useUser();
-  const [loginError, setLoginError] = React.useState<string | null>(null);
+  const { setUser } = useUser();
+  const [loginError, setLoginError] = React.useState<string | undefined>();
 
   React.useEffect(() => {
     if (loginError) {
       setTimeout(() => {
-        setLoginError(null);
+        setLoginError(undefined);
       }, 5000);
     }
   }, [loginError]);
@@ -30,24 +31,24 @@ const Login = () => {
     // eslint-disable-next-line no-unused-vars
     setSubmitting: (submit: boolean) => void
   ) => {
-    await poster<DataDocument | any>(`/auth/login`, values)
-      .then((res) => {
-        if (res?.status === 200) {
-          setData(res.data);
-          window.location.href = '/';
-        } else if (res?.status === 401 || res?.status === 400) {
-          setLoginError(res?.error || res?.message);
-        } else {
-          setLoginError("Something wen't wrong! Please try again later.");
-        }
-      })
-      .catch((err) => {
-        if (err?.status === 401 || err?.status === 400) {
-          setLoginError(err?.error || err?.message);
-        } else {
-          setLoginError('Something went wrong! Please try again later.');
-        }
-      });
+    setLoginError(undefined);
+    const res: ResponseDocument = await fetcher<LoginUserInput>(
+      '/auth/login',
+      'POST',
+      values
+    );
+
+    if (res.status === 'success') {
+      setUser(res?.data?.user);
+      Router.push('/');
+    } else if (
+      res.status === 'error' &&
+      (res.statusCode === 401 || res.statusCode === 400)
+    ) {
+      setLoginError(res.message);
+    } else {
+      setLoginError('Something went wrong! Please try again later.');
+    }
 
     setSubmitting(false);
   };
