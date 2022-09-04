@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { AiOutlineGoogle } from 'react-icons/ai';
-import Router from 'next/router';
 import { Formik } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
@@ -9,13 +8,11 @@ import { APP_NAME } from '@/components/constants';
 import {
   LoginUserInput,
   loginUserSchema,
-  ResponseDocument,
   useUser,
 } from '@/contexts/AuthContext';
-import fetcher from '@/utils/fetcher';
 
 const Login = () => {
-  const { setUser } = useUser();
+  const { login } = useUser();
   const [loginError, setLoginError] = React.useState<string | undefined>();
 
   React.useEffect(() => {
@@ -32,22 +29,18 @@ const Login = () => {
     setSubmitting: (submit: boolean) => void
   ) => {
     setLoginError(undefined);
-    const res: ResponseDocument = await fetcher<LoginUserInput>(
-      '/auth/login',
-      'POST',
-      values
-    );
 
-    if (res.status === 'success') {
-      setUser(res?.data?.user);
-      Router.push('/');
-    } else if (
-      res.status === 'error' &&
-      (res.statusCode === 401 || res.statusCode === 400)
-    ) {
-      setLoginError(res.message);
-    } else {
-      setLoginError('Something went wrong! Please try again later.');
+    const res = await login(values);
+
+    if (res) {
+      if (
+        res.status === 'error' &&
+        (res.statusCode === 401 || res.statusCode === 400)
+      ) {
+        setLoginError(res.message);
+      } else {
+        setLoginError('Something went wrong! Please try again later.');
+      }
     }
 
     setSubmitting(false);

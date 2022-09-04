@@ -6,6 +6,8 @@ import {
   useEffect,
   ReactNode,
   useMemo,
+  Dispatch,
+  SetStateAction,
 } from 'react';
 import Router from 'next/router';
 import { object, TypeOf, z } from 'zod';
@@ -69,7 +71,9 @@ export interface ResponseDocument {
 export interface UserContext {
   user?: UserDocument;
   /* eslint-disable no-unused-vars */
-  setUser: (data?: UserDocument) => void;
+  setUser: Dispatch<SetStateAction<UserDocument | undefined>>;
+  register: (values: CreateUserInput) => Promise<ResponseDocument | undefined>;
+  login: (values: LoginUserInput) => Promise<ResponseDocument | undefined>;
   /* eslint-enable no-unused-vars */
   logout: () => void;
 }
@@ -99,15 +103,47 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
     if (!user) getMe();
   }, [user]);
 
+  const register = async (values: CreateUserInput) => {
+    const response: ResponseDocument = await fetcher<CreateUserInput>(
+      '/users',
+      'POST',
+      values
+    );
+
+    if (response.status === 'success') {
+      setUser(response?.data?.user);
+      Router.push('/');
+      return;
+    }
+
+    return response;
+  };
+
+  const login = async (values: LoginUserInput) => {
+    const response: ResponseDocument = await fetcher<LoginUserInput>(
+      '/auth/login',
+      'POST',
+      values
+    );
+
+    if (response.status === 'success') {
+      setUser(response?.data?.user);
+      Router.push('/');
+      return;
+    }
+
+    return response;
+  };
+
   const logout = async () => {
-    await fetcher('/users/logout', 'POST');
+    await fetcher('/auth/logout', 'POST');
     setUser(undefined);
     Router.push('/');
   };
 
   const value = useMemo(
-    () => ({ user, setUser, logout }),
-    [user, setUser, logout]
+    () => ({ user, setUser, logout, login, register }),
+    [user, setUser, logout, login, register]
   );
 
   return (
