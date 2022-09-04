@@ -5,11 +5,9 @@ import { Formik } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { APP_NAME } from '@/components/constants';
-import {
-  LoginUserInput,
-  loginUserSchema,
-  useUser,
-} from '@/contexts/AuthContext';
+import { useUser } from '@/contexts/AuthContext';
+import { LoginUserInput } from '@/types/user';
+import { loginUserSchema } from '@/schema/user';
 
 const Login = () => {
   const { login } = useUser();
