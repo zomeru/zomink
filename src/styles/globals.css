@@ -52,7 +52,7 @@ a {
     @apply h-[55px] rounded-lg  bg-white  px-[30px] text-primary-500 transition-all  duration-200 ease-in-out hover:bg-neutral-300;
   }
 
-  .btn-primary-submitting {
+  .btn-primary-disabled {
     @apply cursor-not-allowed bg-neutral-600 hover:bg-neutral-600;
   }
 

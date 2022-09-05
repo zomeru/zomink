@@ -71,12 +71,8 @@ const ShortenedURLs = ({ urls }: { urls: Array<URLDocument> }) => {
 
   if (!urls || urls.length === 0) return null;
 
-  const reversedUrls = [...urls].reverse();
-  const firstItem = reversedUrls[0];
-  const otherItems =
-    reversedUrls.length > 3
-      ? reversedUrls.slice(1, 3)
-      : reversedUrls.slice(1);
+  const firstItem = urls[0];
+  const otherItems = urls.length > 3 ? urls.slice(1, 3) : urls.slice(1);
 
   const copyToClipBoard = async (url: string, id: string) => {
     try {
@@ -89,17 +85,16 @@ const ShortenedURLs = ({ urls }: { urls: Array<URLDocument> }) => {
     }
   };
 
+  const URL = `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_DOMAIN}`;
+
   return (
     <div className='mt-4 w-full rounded-lg bg-white p-[20px]'>
       <UrlComponent
         onCopy={() => {
-          copyToClipBoard(
-            `https://zom.ink/${firstItem.alias}`,
-            firstItem._id
-          );
+          copyToClipBoard(`${URL}/${firstItem.alias}`, firstItem._id);
         }}
         copied={urlCopied === firstItem._id}
-        shortURL={`https://zom.ink/${firstItem.alias}`}
+        shortURL={`${URL}/${firstItem.alias}`}
         url={firstItem.link}
         showSeparator
       />
@@ -107,11 +102,11 @@ const ShortenedURLs = ({ urls }: { urls: Array<URLDocument> }) => {
         return (
           <UrlComponent
             onCopy={() => {
-              copyToClipBoard(`https://zom.ink/${item.alias}`, item._id);
+              copyToClipBoard(`${URL}/${item.alias}`, item._id);
             }}
             copied={urlCopied === item._id}
             key={item._id}
-            shortURL={`https://zom.ink/${item.alias}`}
+            shortURL={`${URL}/${item.alias}`}
             url={item.link}
             showSeparator
           />

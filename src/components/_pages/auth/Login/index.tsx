@@ -125,7 +125,7 @@ const Login = () => {
               disabled={isSubmitting}
               type='submit'
               className={`btn-primary-lg ${
-                isSubmitting && 'btn-primary-submitting '
+                isSubmitting && 'btn-primary-disabled '
               }`}
             >
               Log in

@@ -205,7 +205,7 @@ const Register = () => {
               type='submit'
               disabled={isSubmitting}
               className={`btn-primary-lg ${
-                isSubmitting && 'btn-primary-submitting '
+                isSubmitting && 'btn-primary-disabled '
               }`}
             >
               Create an account
