@@ -13,24 +13,27 @@ import { useUser } from '@/contexts/AuthContext';
 import useShortenURLs, { LOCAL_LINKS_KEY } from '@/hooks/useShortenURLs';
 import { ResponseDocument } from '@/types/response';
 import TextError from '@/components/TextError';
+import { aliasValid } from '@/utils/regEx';
 import ShortenedURLs from '../ShortenedURLs';
 
 const ShortenField = () => {
   const { user } = useUser();
   const { shortenedURLs, setShortenedURLs } = useShortenURLs(user);
 
-  console.log('shortenedURLs', shortenedURLs);
-
   const [shortenError, setShortenError] = useState<string | undefined>();
 
-  console.log('shortenError', shortenError);
-
   useEffect(() => {
+    let timeout: any;
+
     if (shortenError) {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         setShortenError(undefined);
       }, 10000);
     }
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [shortenError]);
 
   const onShorten = async (
@@ -40,10 +43,93 @@ const ShortenField = () => {
     setShortenError(undefined);
     NProgress.configure({ showSpinner: false });
     NProgress.start();
+    const newLink =
+      values.link[values.link.length - 1] === '/'
+        ? values.link.slice(0, -1).trim()
+        : values.link.trim();
+
+    if (!user) {
+      let existingShortenedURL: URLDocument | undefined;
+
+      if (values.alias && aliasValid(values.alias)) {
+        existingShortenedURL = shortenedURLs.find(
+          (item) => item.alias === values.alias && item.link === newLink
+        );
+      } else {
+        existingShortenedURL = [...shortenedURLs]
+          .reverse()
+          .find((item) => item.link === newLink);
+      }
+
+      if (existingShortenedURL) {
+        if (existingShortenedURL.alias === values.alias) {
+          setShortenError('Alias already taken');
+          NProgress.done();
+          return;
+        }
+
+        if (values.alias && !aliasValid(values.alias)) {
+          setShortenError('Alias must be 5 alphanumeric characters');
+          NProgress.done();
+          return;
+        }
+
+        const newExistingShortenedURL: URLDocument = {
+          ...existingShortenedURL,
+          updatedAt: new Date(),
+        };
+
+        const newShortenedURLs = [
+          ...shortenedURLs.filter(
+            (item) => item._id !== existingShortenedURL!._id
+          ),
+          newExistingShortenedURL,
+        ];
+
+        localStorage.setItem(
+          LOCAL_LINKS_KEY,
+          JSON.stringify(newShortenedURLs)
+        );
+        setShortenedURLs(newShortenedURLs);
+        setShortenError(undefined);
+      } else {
+        const response: ResponseDocument = await shortenLink({
+          ...values,
+          link: newLink,
+          user: undefined,
+        } as CreateShortURLInput);
+
+        if (response.status === 'success') {
+          const newShortenedURLs = [
+            ...shortenedURLs,
+            response?.data?.urlData as URLDocument,
+          ];
+
+          localStorage.setItem(
+            LOCAL_LINKS_KEY,
+            JSON.stringify(newShortenedURLs)
+          );
+          setShortenedURLs(newShortenedURLs);
+          setShortenError(undefined);
+        } else if (
+          response.status === 'error' &&
+          response.statusCode === 400
+        ) {
+          setShortenError(response.message);
+        } else {
+          setShortenError('Something went wrong! Please try again later.');
+        }
+      }
+
+      resetForm();
+      NProgress.done();
+      return;
+    }
 
     const newValues: CreateShortURLInput = {
       ...values,
-      user: user?._id,
+      link: newLink,
+      user: user._id,
     };
 
     const response: ResponseDocument = await shortenLink(newValues);
@@ -53,17 +139,7 @@ const ShortenField = () => {
         ...prev,
         response?.data?.urlData as URLDocument,
       ]);
-
-      if (!user) {
-        localStorage.setItem(
-          LOCAL_LINKS_KEY,
-          JSON.stringify([
-            ...shortenedURLs,
-            response?.data?.urlData as URLDocument,
-          ])
-        );
-      }
-
+      setShortenError(undefined);
       resetForm();
     } else if (
       response.status === 'error' &&
@@ -110,10 +186,13 @@ const ShortenField = () => {
               <input
                 type='text'
                 name='link'
-                className={`outline-none' placeholder='Paste your link here
-                w-full rounded-lg px-5 text-sky-600 ${
-                  errors.link && touched.link && 'input-error'
+                className={`w-full 
+                rounded-lg px-5 outline-none ${
+                  errors.link && touched.link && values.link.length > 0
+                    ? 'input-error text-red-600'
+                    : 'text-sky-600'
                 }`}
+                placeholder='Paste your link here'
                 value={values.link}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -122,7 +201,7 @@ const ShortenField = () => {
                 type='text'
                 name='alias'
                 className='w-[250px] rounded-lg px-5 outline-none'
-                placeholder='Alias (optional)'
+                placeholder='Alias, (optional)'
                 value={values.alias}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -131,7 +210,7 @@ const ShortenField = () => {
                 disabled={isSubmitting}
                 type='submit'
                 className={`btn-primary-lg ${
-                  isSubmitting && 'btn-primary-submitting'
+                  isSubmitting && 'btn-primary-disabled'
                 }`}
               >
                 Shorten
@@ -162,17 +241,30 @@ const ShortenField = () => {
                 !shortenError && errors.link && values.link.length > 0
               }
               errorText={errors.link!}
-              className='mb-[20px]'
+              className={`mb-[20px] ${
+                shortenedURLs.length > 0 && 'h-[25px]'
+              }`}
+              dotClassName={
+                shortenedURLs.length > 0 ? '-translate-y-[8px]' : ''
+              }
             />
-
             <TextError
               showError={shortenError}
               errorText={shortenError!}
+              className={`mb-[20px] ${
+                shortenedURLs.length > 0 && 'h-[25px]'
+              }`}
+              dotClassName={
+                shortenedURLs.length > 0 ? '-translate-y-[8px]' : ''
+              }
             />
+
             {shortenError && errors.link && shortenedURLs.length > 0 && (
               <div className='mt-[10px] h-[1px]' />
             )}
-            <ShortenedURLs urls={shortenedURLs} />
+            <ShortenedURLs
+              urls={user ? shortenedURLs : [...shortenedURLs].reverse()}
+            />
           </form>
         )}
       </Formik>

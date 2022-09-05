@@ -6,4 +6,6 @@ const shortenLink = async (values: CreateShortURLInput) => {
   return data;
 };
 
+// export const getLocalShortenLinks =
+
 export default shortenLink;

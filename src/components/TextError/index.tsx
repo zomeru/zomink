@@ -4,10 +4,12 @@ const TextError = <T,>({
   showError,
   errorText,
   className,
+  dotClassName,
 }: {
   showError: T;
   errorText: string;
   className?: string;
+  dotClassName?: string;
 }) => {
   return (
     <div
@@ -18,12 +20,12 @@ const TextError = <T,>({
       <p
         className={`-translate-y-[10px] animate-pulse text-4xl text-red-600 ${
           showError ? 'opacity-1 h-[10px]' : 'hidden h-[0px] opacity-0'
-        }`}
+        } ${dotClassName}`}
       >
         &bull;
       </p>
       <p
-        className={`duration-800 animate-bounce text-center font-medium text-red-600 transition-all ease-in-out ${
+        className={`duration-800 animate-bounce text-center text-red-600 transition-all ease-in-out ${
           showError ? 'opacity-1 h-full' : 'hidden h-[0px] opacity-0'
         }`}
       >
@@ -32,7 +34,7 @@ const TextError = <T,>({
       <p
         className={`-translate-y-[10px] animate-pulse text-4xl text-red-600 ${
           showError ? 'opacity-1 h-full' : 'hidden h-[0px] opacity-0'
-        }`}
+        } ${dotClassName}`}
       >
         &bull;
       </p>

@@ -1,9 +1,13 @@
 /* eslint-disable */
 export const linkValid = (link: string): boolean => {
   return (
-    !!link.match(
-      /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
-    ) && !link.includes(' ')
+    !!link
+      .trim()
+      .match(
+        /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+      ) &&
+    !link.trim().includes(' ') &&
+    !link.trim().includes(process.env.NEXT_PUBLIC_DOMAIN as string)
   );
 };
 

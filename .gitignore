@@ -25,6 +25,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+
 # local env files
 .env*.local
 
@@ -37,3 +38,12 @@ next-env.d.ts
 
 # eslint cache
 .eslintcache
+
+# yarn
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
