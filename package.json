@@ -11,7 +11,7 @@
     "lint:staged": "lint-staged",
     "format": "prettier --write ./**/*.{js,jsx,ts,tsx,json,md,mdx}",
     "prepare": "husky install",
-    "install": "rm -rf node_modules && yarn install --frozen-lockfile"
+    "install": "yarn install --frozen-lockfile"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.7",
