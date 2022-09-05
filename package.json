@@ -10,8 +10,7 @@
     "lint": "next lint",
     "lint:staged": "lint-staged",
     "format": "prettier --write ./**/*.{js,jsx,ts,tsx,json,md,mdx}",
-    "prepare": "husky install",
-    "install": "yarn install --frozen-lockfile"
+    "prepare": "husky install"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.7",
