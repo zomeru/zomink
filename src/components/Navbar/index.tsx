@@ -23,11 +23,12 @@ const Navbar = () => {
             if (name === 'Log in' && user) {
               return null;
             }
-            const newName: string = user && name === 'My URLs' ? 'App' : name;
+            const newName: string =
+              user && name === 'My URLs' ? 'Dashboard' : name;
 
             return (
               <Link
-                href={newName === 'App' ? '/app' : link}
+                href={newName === 'Dashboard' ? '/dashboard' : link}
                 passHref
                 key={newName}
               >

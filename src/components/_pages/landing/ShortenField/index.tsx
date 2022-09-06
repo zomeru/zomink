@@ -4,13 +4,12 @@ import NProgress from 'nprogress';
 import { Formik } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
-import { APP_NAME } from '@/components/constants';
-// import { linkValid } from '@/utils/regEx';
+import { APP_NAME, LOCAL_LINKS_KEY } from '@/components/constants';
 import { CreateShortURLInput, URLDocument } from '@/types/url';
 import { createShortURLSchema } from '@/schema/url';
 import shortenLink from '@/utils/shortenLink';
 import { useUser } from '@/contexts/AuthContext';
-import useShortenURLs, { LOCAL_LINKS_KEY } from '@/hooks/useShortenURLs';
+import { useShortenURLs } from '@/hooks';
 import { ResponseDocument } from '@/types/response';
 import TextError from '@/components/TextError';
 import { aliasValid } from '@/utils/regEx';
@@ -28,7 +27,7 @@ const ShortenField = () => {
     if (shortenError) {
       timeout = setTimeout(() => {
         setShortenError(undefined);
-      }, 10000);
+      }, 5000);
     }
 
     return () => {
