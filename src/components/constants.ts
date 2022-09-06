@@ -240,3 +240,5 @@ export const FOOTER_SOCIALS = [
     link: '#',
   },
 ];
+
+export const LOCAL_LINKS_KEY = 'localLinks';

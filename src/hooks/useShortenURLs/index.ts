@@ -4,8 +4,7 @@ import { URLDocument } from '@/types/url';
 import fetcher from '@/utils/fetcher';
 import { ResponseDocument } from '@/types/response';
 import { UserDocument } from '@/types/user';
-
-export const LOCAL_LINKS_KEY = 'localLinks';
+import { LOCAL_LINKS_KEY } from '@/components/constants';
 
 const useShortenURLs = (user: UserDocument | undefined) => {
   const [shortenedURLs, setShortenedURLs] = useState<Array<URLDocument>>(

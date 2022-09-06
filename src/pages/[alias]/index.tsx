@@ -10,14 +10,15 @@ const Alias = ({ link }: { link: string }) => {
   const { push } = useRouter();
 
   useEffect(() => {
-    if (link) push(link);
+    if (link !== 'not found') push(link);
+    if (link === 'not found') setRequestMade(true);
 
     setTimeout(() => {
       setRequestMade(true);
-    }, 3500);
+    }, 3000);
   }, [link]);
 
-  if (requestMade) {
+  if (requestMade || link === 'not found') {
     return (
       <Maintenance>
         <h1 className='mb-4 text-2xl font-medium'>
@@ -52,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      link: null,
+      link: 'not found',
     },
   };
 };

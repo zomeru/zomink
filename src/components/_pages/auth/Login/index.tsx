@@ -8,18 +8,11 @@ import { APP_NAME } from '@/components/constants';
 import { useUser } from '@/contexts/AuthContext';
 import { LoginUserInput } from '@/types/user';
 import { loginUserSchema } from '@/schema/user';
+import { useError } from '@/hooks';
 
 const Login = () => {
   const { login } = useUser();
-  const [loginError, setLoginError] = React.useState<string | undefined>();
-
-  React.useEffect(() => {
-    if (loginError) {
-      setTimeout(() => {
-        setLoginError(undefined);
-      }, 5000);
-    }
-  }, [loginError]);
+  const [loginError, setLoginError] = useError();
 
   const onSubmit = async (
     values: LoginUserInput,
