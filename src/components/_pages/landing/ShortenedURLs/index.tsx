@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 
-import { useUser } from '@/contexts/AuthContext';
 import { URLDocument } from '@/types/url';
 
 const UrlComponent = ({
@@ -67,8 +65,6 @@ const ShortenedURLs = ({ urls }: { urls: Array<URLDocument> }) => {
     };
   }, [urlCopied]);
 
-  const { user } = useUser();
-
   if (!urls || urls.length === 0) return null;
 
   const firstItem = urls[0];
@@ -122,9 +118,9 @@ const ShortenedURLs = ({ urls }: { urls: Array<URLDocument> }) => {
           </button>
         </div>
       </div>
-      <Link href={user ? '/app' : 'my-urls'}>
+      {/* <Link href={user ? '/app' : 'my-urls'}>
         <a className='text-primary-200'>View all your links here</a>
-      </Link>
+      </Link> */}
     </div>
   );
 };

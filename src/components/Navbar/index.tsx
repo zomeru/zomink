@@ -26,20 +26,30 @@ const Navbar = () => {
             const newName: string =
               user && name === 'My URLs' ? 'Dashboard' : name;
 
+            if (['github', 'donate'].indexOf(newName.toLowerCase()) > -1) {
+              return (
+                <a
+                  key={newName}
+                  className={`links ${
+                    newName === 'Donate' &&
+                    'after:bg-pink-600 hover:text-pink-600'
+                  }`}
+                  href={link}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  {newName}
+                </a>
+              );
+            }
+
             return (
               <Link
                 href={newName === 'Dashboard' ? '/dashboard' : link}
                 passHref
                 key={newName}
               >
-                <a
-                  className={`links ${
-                    newName === 'Donate' &&
-                    'after:bg-pink-600 hover:text-pink-600'
-                  }`}
-                >
-                  {newName}
-                </a>
+                <a className='links'>{newName}</a>
               </Link>
             );
           })}

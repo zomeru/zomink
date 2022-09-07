@@ -8,20 +8,11 @@ import { APP_NAME } from '@/components/constants';
 import { useUser } from '@/contexts/AuthContext';
 import { createUserSchema } from '@/schema/user';
 import { CreateUserInput } from '@/types/user';
+import { useError } from '@/hooks';
 
 const Register = () => {
   const { register } = useUser();
-  const [registerError, setRegisterError] = React.useState<
-    string | undefined
-  >();
-
-  React.useEffect(() => {
-    if (registerError) {
-      setTimeout(() => {
-        setRegisterError(undefined);
-      }, 5000);
-    }
-  }, [registerError]);
+  const [registerError, setRegisterError] = useError();
 
   const onSubmit = async (
     values: CreateUserInput,

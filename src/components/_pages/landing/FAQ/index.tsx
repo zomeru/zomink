@@ -7,6 +7,16 @@ import { FAQs } from '@/components/constants';
 const FAQ = () => {
   const [selectedFAQ, setSelectedFAQ] = useState<string | null>(null);
 
+  const itemRefs = React.useMemo(() => {
+    const refs: any = {};
+
+    FAQs.forEach((_, i) => {
+      refs[i] = React.createRef();
+    });
+
+    return refs;
+  }, [FAQs]);
+
   const onFAQClick = (faqId: string) => {
     if (selectedFAQ === faqId) {
       setSelectedFAQ(null);
@@ -18,13 +28,16 @@ const FAQ = () => {
   return (
     <section className='padding-sides my-[80px]'>
       <div className='max-width max-w-[1200px] '>
-        <h2 className='sc-heading mb-[20px]'>Frequently Asked Questions</h2>
-        {FAQs.map(({ id, question, answer }, faqI) => (
+        <h2 className='sc-heading mb-[20px]'>
+          Frequently Asked Questions
+        </h2>
+
+        {FAQs.map(({ id, question, answer }, i) => (
           <div key={id} className='text-primary-500'>
             <div
               onClick={() => onFAQClick(id)}
               onKeyDown={() => onFAQClick(id)}
-              tabIndex={faqI}
+              tabIndex={i}
               role='button'
               className={`flex w-full cursor-pointer items-center justify-between border-b border-neutral-300 py-[20px] px-[80px] transition-all duration-300 ease-in-out hover:bg-neutral-300 ${
                 selectedFAQ === id && 'bg-neutral-300'
@@ -38,10 +51,15 @@ const FAQ = () => {
               )}
             </div>
             <div
-              className={`duration-7000 space-y-3 px-[80px] py-4 transition-all ease-in-out ${
-                selectedFAQ === id
-                  ? 'opacity-1 visible block h-full'
-                  : 'invisible absolute h-[0px] bg-white opacity-0'
+              ref={itemRefs[i]}
+              style={{
+                maxHeight:
+                  selectedFAQ === id
+                    ? `calc(${itemRefs[id].current?.scrollHeight}px + 40px)`
+                    : `0`,
+              }}
+              className={`relative space-y-3 overflow-hidden px-[80px] transition-all duration-500 ease-in-out ${
+                selectedFAQ === id ? 'py-[20px]' : 'py-0'
               }`}
             >
               {answer.map(({ text, coloredText, link }, index) => {
@@ -54,7 +72,11 @@ const FAQ = () => {
                 }
 
                 const newText: string[] = text.split(coloredText);
-                const texts: string[] = [newText[0], coloredText, newText[1]];
+                const texts: string[] = [
+                  newText[0],
+                  coloredText,
+                  newText[1],
+                ];
 
                 return (
                   <p key={index} className='text-infoText'>
@@ -69,7 +91,9 @@ const FAQ = () => {
 
                       return (
                         <span
-                          className={`${tIndex === 1 && 'text-primary-200'}`}
+                          className={`${
+                            tIndex === 1 && 'text-primary-200'
+                          }`}
                           key={tIndex}
                         >
                           {txt}

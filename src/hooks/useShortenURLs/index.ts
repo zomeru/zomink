@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 
 import { URLDocument } from '@/types/url';
 import fetcher from '@/utils/fetcher';
@@ -35,7 +36,10 @@ const useShortenURLs = (user: UserDocument | undefined) => {
     getUrls();
   }, [user]);
 
-  return { shortenedURLs, setShortenedURLs } as const;
+  return { shortenedURLs, setShortenedURLs } as {
+    shortenedURLs: Array<URLDocument>;
+    setShortenedURLs: Dispatch<SetStateAction<Array<URLDocument>>>;
+  };
 };
 
 export default useShortenURLs;

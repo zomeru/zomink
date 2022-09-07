@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import NProgress from 'nprogress';
 import { Formik } from 'formik';
@@ -7,9 +7,9 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { APP_NAME, LOCAL_LINKS_KEY } from '@/components/constants';
 import { CreateShortURLInput, URLDocument } from '@/types/url';
 import { createShortURLSchema } from '@/schema/url';
-import shortenLink from '@/utils/shortenLink';
+import shortenLink, { removeForwardSlash } from '@/utils/shortenLink';
 import { useUser } from '@/contexts/AuthContext';
-import { useShortenURLs } from '@/hooks';
+import { useError, useShortenURLs } from '@/hooks';
 import { ResponseDocument } from '@/types/response';
 import TextError from '@/components/TextError';
 import { aliasValid } from '@/utils/regEx';
@@ -17,23 +17,8 @@ import ShortenedURLs from '../ShortenedURLs';
 
 const ShortenField = () => {
   const { user } = useUser();
+  const [shortenError, setShortenError] = useError();
   const { shortenedURLs, setShortenedURLs } = useShortenURLs(user);
-
-  const [shortenError, setShortenError] = useState<string | undefined>();
-
-  useEffect(() => {
-    let timeout: any;
-
-    if (shortenError) {
-      timeout = setTimeout(() => {
-        setShortenError(undefined);
-      }, 5000);
-    }
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [shortenError]);
 
   const onShorten = async (
     values: CreateShortURLInput,
@@ -42,10 +27,7 @@ const ShortenField = () => {
     setShortenError(undefined);
     NProgress.configure({ showSpinner: false });
     NProgress.start();
-    const newLink =
-      values.link[values.link.length - 1] === '/'
-        ? values.link.slice(0, -1).trim()
-        : values.link.trim();
+    const newLink = removeForwardSlash(values.link).trim();
 
     if (!user) {
       let existingShortenedURL: URLDocument | undefined;
@@ -91,6 +73,7 @@ const ShortenField = () => {
         );
         setShortenedURLs(newShortenedURLs);
         setShortenError(undefined);
+        resetForm();
       } else {
         const response: ResponseDocument = await shortenLink({
           ...values,
@@ -110,6 +93,7 @@ const ShortenField = () => {
           );
           setShortenedURLs(newShortenedURLs);
           setShortenError(undefined);
+          resetForm();
         } else if (
           response.status === 'error' &&
           response.statusCode === 400
@@ -120,7 +104,6 @@ const ShortenField = () => {
         }
       }
 
-      resetForm();
       NProgress.done();
       return;
     }
@@ -134,10 +117,12 @@ const ShortenField = () => {
     const response: ResponseDocument = await shortenLink(newValues);
 
     if (response.status === 'success') {
-      setShortenedURLs((prev) => [
-        ...prev,
-        response?.data?.urlData as URLDocument,
-      ]);
+      const newShortenedURL = response?.data?.urlData as URLDocument;
+      const filteredShortenedURLs = shortenedURLs.filter(
+        (item) => item._id !== newShortenedURL._id
+      );
+
+      setShortenedURLs([...filteredShortenedURLs, newShortenedURL]);
       setShortenError(undefined);
       resetForm();
     } else if (
@@ -261,9 +246,7 @@ const ShortenField = () => {
             {shortenError && errors.link && shortenedURLs.length > 0 && (
               <div className='mt-[10px] h-[1px]' />
             )}
-            <ShortenedURLs
-              urls={user ? shortenedURLs : [...shortenedURLs].reverse()}
-            />
+            <ShortenedURLs urls={[...shortenedURLs].reverse()} />
           </form>
         )}
       </Formik>

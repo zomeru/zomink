@@ -22,7 +22,7 @@ export const NAV_LINKS = [
   },
   {
     name: 'GitHub',
-    link: '/github',
+    link: 'https://github.com/zomeru/zomink-client',
   },
   {
     name: 'Donate',
@@ -73,7 +73,7 @@ interface IFAQs {
 
 export const FAQs: IFAQs[] = [
   {
-    id: 'question#1',
+    id: 'faq1',
     question: 'What is a Link Shortener?',
     answer: [
       {
@@ -92,7 +92,7 @@ export const FAQs: IFAQs[] = [
     ],
   },
   {
-    id: 'question#2',
+    id: 'faq2',
     question: 'Why use a Link Shortener?',
     answer: [
       {
@@ -110,7 +110,7 @@ export const FAQs: IFAQs[] = [
     ],
   },
   {
-    id: 'question#3',
+    id: 'faq3',
     question: `Features of ${APP_NAME}’s Link Management Platform`,
     answer: [
       {
@@ -125,7 +125,7 @@ export const FAQs: IFAQs[] = [
     ],
   },
   {
-    id: 'question#4',
+    id: 'faq4',
     question: `Why choose ${APP_NAME}?`,
     answer: [
       {
