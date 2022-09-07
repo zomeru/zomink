@@ -55,7 +55,7 @@ const FAQ = () => {
               style={{
                 maxHeight:
                   selectedFAQ === id
-                    ? `calc(${itemRefs[id].current?.scrollHeight}px + 40px)`
+                    ? `calc(${itemRefs[i].current?.scrollHeight}px + 40px)`
                     : `0`,
               }}
               className={`relative space-y-3 overflow-hidden px-[80px] transition-all duration-500 ease-in-out ${
