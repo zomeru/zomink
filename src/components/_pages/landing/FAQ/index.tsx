@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
 
 import { FAQs } from '@/components/constants';
 
@@ -44,11 +43,11 @@ const FAQ = () => {
               }`}
             >
               <h2 className='text-lg font-semibold'>{question}</h2>
-              {selectedFAQ === id ? (
-                <AiOutlineClose className='text-2xl' />
-              ) : (
-                <AiOutlinePlus className='text-2xl' />
-              )}
+              <div
+                className={`inline-block origin-center text-center text-[40px] leading-[24px] text-primary-500 transition-all duration-700 ease-in-out before:content-["+"] ${
+                  selectedFAQ === id && 'rotate-[140deg]'
+                }`}
+              />
             </div>
             <div
               ref={itemRefs[i]}
