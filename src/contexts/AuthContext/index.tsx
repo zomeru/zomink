@@ -13,13 +13,19 @@ import Router from 'next/router';
 
 import fetcher from '@/utils/fetcher';
 import { ResponseDocument } from '@/types/response';
-import { CreateUserInput, LoginUserInput, UserDocument } from '@/types/user';
+import {
+  CreateUserInput,
+  LoginUserInput,
+  UserDocument,
+} from '@/types/user';
 
 export interface UserContext {
   user?: UserDocument;
   /* eslint-disable no-unused-vars */
   setUser: Dispatch<SetStateAction<UserDocument | undefined>>;
-  register: (values: CreateUserInput) => Promise<ResponseDocument | undefined>;
+  register: (
+    values: CreateUserInput
+  ) => Promise<ResponseDocument | undefined>;
   login: (values: LoginUserInput) => Promise<ResponseDocument | undefined>;
   /* eslint-enable no-unused-vars */
   logout: () => void;
