@@ -1,18 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { AiOutlineGoogle } from 'react-icons/ai';
 import { Formik } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+import { useRouter } from 'next/router';
 
 import { APP_NAME } from '@/components/constants';
 import { useUser } from '@/contexts/AuthContext';
 import { LoginUserInput } from '@/types/user';
 import { loginUserSchema } from '@/schema/user';
 import { useError } from '@/hooks';
+import getGoogleOAuthURL from '@/utils/getGoogleOAuthURL';
 
 const Login = () => {
+  const { push, query, replace } = useRouter();
   const { login } = useUser();
   const [loginError, setLoginError] = useError();
+
+  useEffect(() => {
+    let timeout: any;
+    if (query.error) {
+      timeout = setTimeout(() => {
+        replace('/auth/login', undefined, { shallow: true });
+      }, 5000);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [query]);
 
   const onSubmit = async (
     values: LoginUserInput,
@@ -66,7 +82,7 @@ const Login = () => {
                 <a className='text-primary-200 underline'>Sign up</a>
               </Link>
               {' or '}
-              <Link href='#'>
+              <Link href={getGoogleOAuthURL()}>
                 <a className='text-primary-200 underline'>
                   Sign up with Google
                 </a>
@@ -75,6 +91,9 @@ const Login = () => {
             <button
               type='button'
               className='btn-primary-lg mx-auto flex items-center justify-center space-x-3'
+              onClick={() => {
+                push(getGoogleOAuthURL());
+              }}
             >
               <AiOutlineGoogle className='text-2xl text-white' />
               <span>Log in with Google</span>
@@ -108,10 +127,12 @@ const Login = () => {
 
             <p
               className={`duration-800 text-red-400 transition-all ease-in-out ${
-                loginError ? 'opacity-1 h-full' : ' h-0 opacity-0'
+                loginError || query.error
+                  ? 'opacity-1 h-full'
+                  : ' h-0 opacity-0'
               }`}
             >
-              {loginError}
+              {loginError || query.error}
             </p>
 
             <button
