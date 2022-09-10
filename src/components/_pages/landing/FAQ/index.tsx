@@ -45,7 +45,7 @@ const FAQ = () => {
               <h2 className='text-lg font-semibold'>{question}</h2>
               <div
                 className={`inline-block origin-center text-center text-[40px] leading-[24px] text-primary-500 transition-all duration-700 ease-in-out before:content-["+"] ${
-                  selectedFAQ === id && 'rotate-[140deg]'
+                  selectedFAQ === id && 'rotate-[134deg]'
                 }`}
               />
             </div>

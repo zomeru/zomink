@@ -44,8 +44,6 @@ interface UserProviderProps {
 const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDocument | undefined>();
 
-  console.log('user auth', user);
-
   const getMe = async () => {
     const response = await fetcher('/users/me', 'GET');
 
