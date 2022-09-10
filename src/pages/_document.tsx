@@ -101,10 +101,20 @@ export default class MyDocument extends Document {
           />
           <meta name='theme-color' content='#009BD6' />
           <script
+            className='adsbygoogle block'
+            data-ad-client='ca-pub-7937582936822983'
+            data-ad-format='auto'
+            data-full-width-responsive='true'
+            async
+            src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7937582936822983'
+            crossOrigin='anonymous'
+          />
+          <script
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
           />
           <script
+            async
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
               __html: `
