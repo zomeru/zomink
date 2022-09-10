@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { AiOutlineGoogle } from 'react-icons/ai';
 import { Formik } from 'formik';
+import { useRouter } from 'next/router';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { APP_NAME } from '@/components/constants';
@@ -9,8 +10,10 @@ import { useUser } from '@/contexts/AuthContext';
 import { createUserSchema } from '@/schema/user';
 import { CreateUserInput } from '@/types/user';
 import { useError } from '@/hooks';
+import getGoogleOAuthURL from '@/utils/getGoogleOAuthURL';
 
 const Register = () => {
+  const { push } = useRouter();
   const { register } = useUser();
   const [registerError, setRegisterError] = useError();
 
@@ -73,13 +76,17 @@ const Register = () => {
                 <a className='text-primary-200 underline'>Log in</a>
               </Link>
               {' or '}
-              <a href='#' className='text-primary-200 underline'>
+              <a
+                href={getGoogleOAuthURL()}
+                className='text-primary-200 underline'
+              >
                 Log in with Google
               </a>
             </p>
             <button
               type='button'
               className='btn-primary-lg mx-auto flex items-center justify-center space-x-3'
+              onClick={() => push(getGoogleOAuthURL())}
             >
               <AiOutlineGoogle className='text-2xl text-white' />
               <span>Sign up with Google</span>
