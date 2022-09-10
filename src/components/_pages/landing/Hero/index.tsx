@@ -20,9 +20,9 @@ const Hero = () => {
               Manage your links in an easy way.
             </h2>
             <h3 className='text-infoText'>
-              {APP_NAME} is a free and open-source link management platform with
-              all the features you need in one place. Manage, track, and shorten
-              your links with your custom alias.
+              {APP_NAME} is a free and open-source link management platform
+              with all the features you need in one place. Manage, track,
+              and shorten your links with your custom alias.
             </h3>
             <div className='space-x-3'>
               <button
@@ -43,10 +43,13 @@ const Hero = () => {
           </div>
           <div className='relative h-full w-full'>
             <Image
+              placeholder='blur'
               src={HERO_IMAGE}
               layout='fill'
               objectFit='contain'
               alt={`${APP_NAME} - Hero Analytics Image`}
+              blurDataURL={HERO_IMAGE}
+              quality={50}
             />
           </div>
         </div>

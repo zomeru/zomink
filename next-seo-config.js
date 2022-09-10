@@ -2,7 +2,7 @@ import { APP_NAME } from '@/components/constants';
 
 const description = `${APP_NAME} is a free and open-source link management platform with all the features you need in one place. Manage, track, and shorten your links with your custom alias.`;
 
-const imgUrl = ''; // TODO: add image
+const imgUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/assets/images/app_image.png`; // TODO: add image
 
 export default {
   title: `${APP_NAME} - Free Link Shortener`,
