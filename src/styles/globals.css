@@ -41,15 +41,15 @@ a {
   }
 
   .btn-primary-lg {
-    @apply h-[55px] rounded-lg bg-primary-200 px-[30px] text-white transition-all duration-200 ease-in-out hover:bg-primary-300;
+    @apply h-[45px] rounded-lg bg-primary-200 px-[20px] text-white transition-all duration-200 ease-in-out hover:bg-primary-300 sm:h-[55px] sm:px-[30px];
   }
 
   .btn-secondary-lg {
-    @apply h-[55px] rounded-lg border border-primary-200 bg-white px-[30px] text-primary-200 transition-all duration-200 ease-in-out hover:bg-sky-100;
+    @apply h-[45px] rounded-lg border border-primary-200 bg-white px-[20px] text-primary-200 transition-all duration-200 ease-in-out hover:bg-sky-100 sm:h-[55px] sm:px-[30px];
   }
 
   .btn-white-lg {
-    @apply h-[55px] rounded-lg  bg-white  px-[30px] text-primary-500 transition-all  duration-200 ease-in-out hover:bg-neutral-300;
+    @apply h-[45px] rounded-lg bg-white  px-[30px]  text-primary-500 transition-all duration-200  ease-in-out hover:bg-neutral-300 sm:h-[55px];
   }
 
   .btn-primary-disabled {
@@ -65,10 +65,10 @@ a {
   }
 
   .padding-sides {
-    @apply px-[50px];
+    @apply px-[20px] md:px-[50px];
   }
 
   .sc-heading {
-    @apply text-center text-3xl font-bold text-primary-500;
+    @apply text-center text-2xl font-bold text-primary-500 sm:text-3xl;
   }
 }

@@ -3,11 +3,11 @@ import {
   FC,
   useContext,
   useState,
-  useEffect,
   ReactNode,
   useMemo,
   Dispatch,
   SetStateAction,
+  useLayoutEffect,
 } from 'react';
 import Router from 'next/router';
 
@@ -52,7 +52,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!user) getMe();
   }, [user]);
 
