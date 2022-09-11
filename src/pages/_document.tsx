@@ -27,9 +27,8 @@ export default class MyDocument extends Document {
 
   render(): ReactElement {
     return (
-      <Html>
+      <Html lang='en'>
         <Head>
-          <meta charSet='UTF-8' />
           <link
             rel='apple-touch-icon'
             sizes='57x57'

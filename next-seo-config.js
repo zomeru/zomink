@@ -1,27 +1,29 @@
-import { APP_NAME } from '@/components/constants';
+import {
+  APP_DESCRIPTION,
+  APP_TITLE,
+  APP_URL,
+} from '@/components/constants';
 
-const description = `${APP_NAME} is a free and open-source link management platform with all the features you need in one place. Manage, track, and shorten your links with your custom alias.`;
-
-const imgUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/assets/images/app_image.png`; // TODO: add image
+const imgUrl = `https://zom.ink/assets/images/app_image.png`;
 
 export default {
-  title: `${APP_NAME} - Free Link Shortener`,
-  description,
+  title: APP_TITLE,
+  description: APP_DESCRIPTION,
   openGraph: {
     type: 'website',
-    url: 'https://zom.ink',
-    title: `${APP_NAME} - Free Link Shortener`,
-    description,
+    url: APP_URL,
+    title: APP_TITLE,
+    description: APP_DESCRIPTION,
     images: [
       {
         url: imgUrl,
-        width: 1400,
+        width: 1600,
         height: 800,
-        alt: `${APP_NAME} - Free Link Shortener`,
+        alt: APP_TITLE,
         type: 'image/png',
       },
     ],
-    site_name: `${APP_NAME} - Free Link Shortener`,
+    site_name: APP_TITLE,
   },
   twitter: {
     cardType: 'summary_large_image',

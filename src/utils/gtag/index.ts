@@ -11,7 +11,6 @@ type GTagEvent = {
   value: number;
 };
 
-// https://developers.google.com/analytics/devguides/collection/gtagjs/events
 export const event = ({
   action,
   category,
