@@ -25,7 +25,7 @@ const FAQ = () => {
   };
 
   return (
-    <section className='padding-sides my-[80px]'>
+    <section className='padding-sides my-[60px] sm:my-[80px]'>
       <div className='max-width max-w-[1200px] '>
         <h2 className='sc-heading mb-[20px]'>
           Frequently Asked Questions
@@ -38,13 +38,15 @@ const FAQ = () => {
               onKeyDown={() => onFAQClick(id)}
               tabIndex={i}
               role='button'
-              className={`flex w-full cursor-pointer items-center justify-between border-b border-neutral-300 py-[20px] px-[80px] transition-all duration-300 ease-in-out hover:bg-neutral-300 ${
+              className={`flex w-full cursor-pointer items-center justify-between border-b border-neutral-300 py-[20px] px-[20px] transition-all duration-300 ease-in-out hover:bg-neutral-300 sm:px-[80px] ${
                 selectedFAQ === id && 'bg-neutral-300'
               }`}
             >
-              <h2 className='text-lg font-semibold'>{question}</h2>
+              <h2 className='w-[90%] text-base font-semibold sm:w-full sm:text-lg'>
+                {question}
+              </h2>
               <div
-                className={`inline-block origin-center text-center text-[40px] leading-[24px] text-primary-500 transition-all duration-700 ease-in-out before:content-["+"] ${
+                className={`inline-block origin-center text-center text-[30px] leading-[24px] text-primary-500 transition-all duration-700 ease-in-out before:content-["+"] sm:text-[40px] ${
                   selectedFAQ === id && 'rotate-[134deg]'
                 }`}
               />
@@ -57,14 +59,17 @@ const FAQ = () => {
                     ? `calc(${itemRefs[i].current?.scrollHeight}px + 40px)`
                     : `0`,
               }}
-              className={`relative space-y-3 overflow-hidden px-[80px] transition-all duration-500 ease-in-out ${
+              className={`relative space-y-3 overflow-hidden px-[20px] transition-all duration-500 ease-in-out sm:px-[80px] ${
                 selectedFAQ === id ? 'py-[20px]' : 'py-0'
               }`}
             >
               {answer.map(({ text, coloredText, link }, index) => {
                 if (!coloredText) {
                   return (
-                    <p key={index} className='text-infoText'>
+                    <p
+                      key={index}
+                      className='text-sm text-infoText sm:text-base'
+                    >
                       {text}
                     </p>
                   );
@@ -83,14 +88,16 @@ const FAQ = () => {
                       if (link && tIndex === 1) {
                         return (
                           <Link key={tIndex} href={link} passHref>
-                            <a className='text-primary-200'>{txt}</a>
+                            <a className='text-sm text-primary-200 sm:text-base'>
+                              {txt}
+                            </a>
                           </Link>
                         );
                       }
 
                       return (
                         <span
-                          className={`${
+                          className={`text-sm sm:text-base ${
                             tIndex === 1 && 'text-primary-200'
                           }`}
                           key={tIndex}

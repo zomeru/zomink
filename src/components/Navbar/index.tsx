@@ -18,7 +18,7 @@ const Navbar = () => {
             <Logo />
           </a>
         </Link>
-        <div className='flex items-center space-x-[30px]'>
+        <div className='hidden items-center space-x-[20px] sm:flex md:space-x-[30px]'>
           {NAV_LINKS.map(({ name, link }) => {
             if (name === 'Log in' && user) {
               return null;

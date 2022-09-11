@@ -166,12 +166,12 @@ const ShortenField = () => {
             }`}
             onSubmit={handleSubmit}
           >
-            <div className='flex w-full space-x-3'>
+            <div className='flex w-full flex-col space-y-3 space-x-0 sm:flex-row sm:space-y-0 sm:space-x-3'>
               <input
                 type='text'
                 name='link'
-                className={`w-full 
-                rounded-lg px-5 outline-none ${
+                className={`h-[45px] w-full rounded-lg px-5 text-sm 
+                outline-none sm:h-auto sm:text-base ${
                   errors.link && touched.link && values.link.length > 0
                     ? 'input-error text-red-600'
                     : 'text-sky-600'
@@ -184,7 +184,7 @@ const ShortenField = () => {
               <input
                 type='text'
                 name='alias'
-                className='w-[250px] rounded-lg px-5 outline-none'
+                className='h-[45px] w-full rounded-lg px-5 text-sm outline-none sm:h-auto sm:w-[180px] sm:text-base md:w-[250px]'
                 placeholder='Alias, (optional)'
                 value={values.alias}
                 onChange={handleChange}
@@ -200,7 +200,7 @@ const ShortenField = () => {
                 Shorten
               </button>
             </div>
-            <p className='text-center text-sm font-light text-white'>
+            <p className='text-center text-xs font-light text-white sm:text-sm'>
               By clicking Shorten, you are agreeing to {APP_NAME}&apos;s{' '}
               <strong>
                 <Link href='/pages/terms-of-service'>
