@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-import { APP_NAME } from '@/components/constants';
+import { APP_DESCRIPTION, APP_NAME } from '@/components/constants';
 
 const HERO_IMAGE = '/assets/images/hero_image.png';
 
@@ -19,11 +19,7 @@ const Hero = () => {
             <h2 className='text-5xl font-extrabold 2xl:text-6xl'>
               Manage your links in an easy way.
             </h2>
-            <h3 className='text-infoText'>
-              {APP_NAME} is a free and open-source link management platform
-              with all the features you need in one place. Manage, track,
-              and shorten your links with your custom alias.
-            </h3>
+            <h3 className='text-infoText'>{APP_DESCRIPTION}</h3>
             <div className='space-x-3'>
               <button
                 type='button'

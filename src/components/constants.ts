@@ -11,6 +11,12 @@ export const APP_NAME_LOGO = {
   domain: 'ink',
 };
 
+export const APP_DESCRIPTION = `${APP_NAME} is an open-source link management platform with all the features you need in one place. Manage, track, and shorten your URLs with your custom alias.`;
+
+export const APP_TITLE = `${APP_NAME} - URL Shortener | Link Shortener | Link Management Platform`;
+
+export const APP_URL = `${process.env.NEXT_PUBLIC_PROTOCOL}//${process.env.NEXT_PUBLIC_APP_DOMAIN}`;
+
 export const NAV_LINKS = [
   {
     name: 'My URLs',
