@@ -32,21 +32,44 @@ const Alias = ({ link }: { link: string }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req } = context;
   const { alias } = context.params as { alias: string };
 
-  const response: {
-    status: string;
-    link: string;
-  } = await fetcher(`/${alias}/urls`, 'GET');
+  const userAgent = req.headers['user-agent'] as string;
 
-  if (response.status === 'success') {
+  try {
+    const response: {
+      status: string;
+      data: {
+        url: any;
+      };
+    } = await fetcher(`/${alias}/urls`, 'GET');
+
+    if (response.status === 'success') {
+      const clickResponse = await fetcher(
+        `/clicks/${response.data.url._id}`,
+        'POST',
+        {
+          userAgent,
+        }
+      );
+
+      if (clickResponse.status === 'success') {
+        return {
+          props: {
+            url: response.data.url.link,
+          },
+          redirect: {
+            destination: response.data.url.link,
+            statusCode: 301,
+          },
+        };
+      }
+    }
+  } catch (error) {
     return {
       props: {
-        link: response.link,
-      },
-      redirect: {
-        destination: response.link,
-        statusCode: 301,
+        link: 'not found',
       },
     };
   }
