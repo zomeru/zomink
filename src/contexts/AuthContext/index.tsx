@@ -7,7 +7,7 @@ import {
   useMemo,
   Dispatch,
   SetStateAction,
-  useLayoutEffect,
+  useEffect,
 } from 'react';
 import Router from 'next/router';
 
@@ -45,15 +45,23 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDocument | undefined>();
 
   const getMe = async () => {
-    const response = await fetcher('/users/me', 'GET');
-
-    if (response?.status === 'success') {
-      setUser(response.data.user);
+    try {
+      const response = await fetcher('/users/me', 'GET');
+      if (response?.status === 'success') {
+        setUser(response.data.user);
+      }
+    } catch (error) {
+      setUser(undefined);
     }
   };
 
-  useLayoutEffect(() => {
-    if (!user) getMe();
+  useEffect(() => {
+    const token = document.cookie
+      .split('; ')
+      .filter((row) => row.startsWith('access='))
+      .map((c) => c.split('=')[1])[0];
+
+    if (!user && token) getMe();
   }, [user]);
 
   const register = async (values: CreateUserInput) => {
