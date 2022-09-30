@@ -184,17 +184,30 @@ const ShortenField = () => {
               <input
                 type='text'
                 name='alias'
-                className='h-[45px] w-full rounded-lg px-5 text-sm outline-none sm:h-auto sm:w-[180px] sm:text-base md:w-[250px]'
+                className={`h-[45px] w-full rounded-lg px-5 text-sm outline-none sm:h-auto sm:w-[180px] sm:text-base md:w-[250px] ${
+                  errors.alias && touched.alias && values.alias.length > 0
+                    ? 'input-error text-red-600'
+                    : 'text-sky-600'
+                }`}
                 placeholder='Alias, (optional)'
                 value={values.alias}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
+              {/* <div>{isSubmitting}</div> */}
               <button
-                disabled={isSubmitting}
+                disabled={
+                  isSubmitting ||
+                  (!!errors.link && errors.link !== 'Link is required') ||
+                  !!errors.alias
+                }
                 type='submit'
                 className={`btn-primary-lg ${
-                  isSubmitting && 'btn-primary-disabled'
+                  isSubmitting ||
+                  (!!errors.link && errors.link !== 'Link is required') ||
+                  errors.alias
+                    ? 'btn-primary-disabled'
+                    : ''
                 }`}
               >
                 Shorten
@@ -220,6 +233,18 @@ const ShortenField = () => {
               </strong>
               , and <strong>Use of Cookies</strong>.
             </p>
+            <TextError
+              showError={
+                !shortenError && errors.alias && values.alias.length > 0
+              }
+              errorText={errors.alias!}
+              className={`mb-[20px] ${
+                shortenedURLs.length > 0 && 'h-[25px]'
+              }`}
+              dotClassName={
+                shortenedURLs.length > 0 ? '-translate-y-[8px]' : ''
+              }
+            />
             <TextError
               showError={
                 !shortenError && errors.link && values.link.length > 0

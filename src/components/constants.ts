@@ -248,3 +248,6 @@ export const FOOTER_SOCIALS = [
 ];
 
 export const LOCAL_LINKS_KEY = 'localLinks';
+
+export const INVALID_LINKS =
+  'typedream.app, dynadot.com, linklist.live, monkak, fabuiousdatlng, iurl.ge, app.link, short.io, shortcm.li, bit.ly, bitly.com, rebrandly.com, rebrand.ly, rebrandly.blog, linklyhq.com, clickmeter.com, pixelme.me, pxlme.me, bl.ink, b.link, cutt.ly, lnk.to, link.to, t.ly, tinycc.com, tiny.cc, tinyurl.com, t2mio.com, tiny.ie, shorturl.at, bit.do, yourls.org, ay.gy, lyksoomu.com, adf.ly, ouo.io, adshrink.it, clk.sh, shortzon.com, adfoc.us, ity.im, adpaylink.com, shrink.pe, uii.io, cutwin.com, linkspy.cc, pubiza.com, lnkload.com, payskip.org, oke.io, clik.pw, al.ly, miniurl.pw, miniurl.io, binb.me, spaste.com, short.com, shrtfly.com, shorte.st, festyy.com, bc.vc, smoner.com';
