@@ -1,4 +1,17 @@
+import { INVALID_LINKS } from '@/components/constants';
+
 /* eslint-disable */
+export const linkAccepted = (link: string): boolean => {
+  const match = link.match(/^(?:https?:)?(?:\/\/)?([^\/\?]+)/i);
+  const hostname = match && match[1];
+
+  return !INVALID_LINKS.includes(
+    hostname?.replace('www.', '') ||
+      (process.env.NEXT_PUBLIC_DOMAIN as string) ||
+      ''
+  );
+};
+
 export const linkValid = (link: string): boolean => {
   return (
     !!link
