@@ -44,24 +44,24 @@ interface UserProviderProps {
 const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDocument | undefined>();
 
-  const getMe = async () => {
-    try {
-      const response = await fetcher('/users/me', 'GET');
-      if (response?.status === 'success') {
-        setUser(response.data.user);
-      }
-    } catch (error) {
-      setUser(undefined);
-    }
-  };
-
   useEffect(() => {
-    const token = document.cookie
-      .split('; ')
-      .filter((row) => row.startsWith('access='))
-      .map((c) => c.split('=')[1])[0];
+    // const token = document.cookie
+    //   .split('; ')
+    //   .filter((row) => row.startsWith('access='))
+    //   .map((c) => c.split('=')[1])[0];
 
-    if (!user && token) getMe();
+    const getCurrentUser = async () => {
+      try {
+        const response = await fetcher('/users/me', 'GET');
+        if (response?.status === 'success') {
+          setUser(response.data.user);
+        }
+      } catch (error) {
+        setUser(undefined);
+      }
+    };
+
+    if (!user) getCurrentUser();
   }, [user]);
 
   const register = async (values: CreateUserInput) => {

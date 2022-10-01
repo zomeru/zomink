@@ -10,6 +10,7 @@ export default async function middleware(req: NextRequest) {
   const isUrlNoUserRoute = noUserRoutes.some((route) =>
     url.includes(route)
   );
+
   try {
     if (url.includes('/dashboard')) {
       const response = await fetcher(`/auth/access/${token}`, 'POST');
