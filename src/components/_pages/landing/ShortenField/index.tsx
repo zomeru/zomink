@@ -202,10 +202,6 @@ const ShortenField = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              <div>{shortening.toString()}</div>
-              <div>{isSubmitting.toString()}</div>
-              <div>{errors.link?.toString()}</div>
-              <div>{errors.alias?.toString()}</div>
               <button
                 disabled={
                   shortening ||
