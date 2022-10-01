@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import NProgress from 'nprogress';
 import { Formik } from 'formik';
@@ -20,12 +20,15 @@ const ShortenField = () => {
   const [shortenError, setShortenError] = useError();
   const { shortenedURLs, setShortenedURLs } = useShortenURLs(user);
 
+  const [shortening, setShortening] = useState(false);
+
   const onShorten = async (
     values: CreateShortURLInput,
     resetForm: () => void
   ) => {
+    setShortening(true);
     setShortenError(undefined);
-    NProgress.configure({ showSpinner: false });
+    NProgress.configure({ showSpinner: true });
     NProgress.start();
     const newLink = removeForwardSlash(values.link).trim();
 
@@ -46,12 +49,14 @@ const ShortenField = () => {
         if (existingShortenedURL.alias === values.alias) {
           setShortenError('Alias already taken');
           NProgress.done();
+          setShortening(false);
           return;
         }
 
         if (values.alias && !aliasValid(values.alias)) {
           setShortenError('Alias must be 5 alphanumeric characters');
           NProgress.done();
+          setShortening(false);
           return;
         }
 
@@ -73,6 +78,7 @@ const ShortenField = () => {
         );
         setShortenedURLs(newShortenedURLs);
         setShortenError(undefined);
+        setShortening(false);
         resetForm();
       } else {
         const response: ResponseDocument = await shortenLink({
@@ -105,6 +111,7 @@ const ShortenField = () => {
       }
 
       NProgress.done();
+      setShortening(false);
       return;
     }
 
@@ -135,6 +142,7 @@ const ShortenField = () => {
     }
 
     NProgress.done();
+    setShortening(false);
   };
 
   return (
@@ -154,7 +162,7 @@ const ShortenField = () => {
         {({
           values,
           errors,
-          touched,
+          // touched,
           handleChange,
           handleBlur,
           handleSubmit,
@@ -172,7 +180,7 @@ const ShortenField = () => {
                 name='link'
                 className={`h-[45px] w-full rounded-lg px-5 text-sm 
                 outline-none sm:h-auto sm:text-base ${
-                  errors.link && touched.link && values.link.length > 0
+                  errors.link && values.link.length > 0
                     ? 'input-error text-red-600'
                     : 'text-sky-600'
                 }`}
@@ -185,7 +193,7 @@ const ShortenField = () => {
                 type='text'
                 name='alias'
                 className={`h-[45px] w-full rounded-lg px-5 text-sm outline-none sm:h-auto sm:w-[180px] sm:text-base md:w-[250px] ${
-                  errors.alias && touched.alias && values.alias.length > 0
+                  errors.alias && values.alias.length > 0
                     ? 'input-error text-red-600'
                     : 'text-sky-600'
                 }`}
@@ -194,15 +202,20 @@ const ShortenField = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {/* <div>{isSubmitting}</div> */}
+              <div>{shortening.toString()}</div>
+              <div>{isSubmitting.toString()}</div>
+              <div>{errors.link?.toString()}</div>
+              <div>{errors.alias?.toString()}</div>
               <button
                 disabled={
+                  shortening ||
                   isSubmitting ||
                   (!!errors.link && errors.link !== 'Link is required') ||
                   !!errors.alias
                 }
                 type='submit'
                 className={`btn-primary-lg ${
+                  shortening ||
                   isSubmitting ||
                   (!!errors.link && errors.link !== 'Link is required') ||
                   errors.alias
