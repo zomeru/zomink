@@ -12,7 +12,7 @@ import 'nprogress/nprogress.css';
 import '../styles/globals.css';
 
 Router.events.on('routeChangeStart', () => {
-  NProgress.configure({ showSpinner: true });
+  NProgress.configure({ showSpinner: false });
   NProgress.start();
 });
 Router.events.on('routeChangeComplete', () => NProgress.done());
