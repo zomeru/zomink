@@ -15,7 +15,7 @@ const Alias = ({ link }: { link: string }) => {
 
     setTimeout(() => {
       setRequestMade(true);
-    }, 3000);
+    }, 5000);
   }, [link]);
 
   if (requestMade || link === 'not found') {
@@ -37,48 +37,33 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const userAgent = req.headers['user-agent'] as string;
 
-  try {
-    const response: {
-      status: string;
-      data: {
-        url: any;
-      };
-    } = await fetcher(`/${alias}/urls`, 'GET');
+  const response: {
+    status: string;
+    data: {
+      url: any;
+    };
+  } = await fetcher(
+    `/${alias}/${encodeURIComponent(userAgent)}/urls`,
+    'GET'
+  );
 
-    if (response.status === 'success') {
-      const clickResponse = await fetcher(
-        `/clicks/${response.data.url._id}`,
-        'POST',
-        {
-          userAgent,
-        }
-      );
-
-      if (clickResponse.status === 'success') {
-        return {
-          props: {
-            url: response.data.url.link,
-          },
-          redirect: {
-            destination: response.data.url.link,
-            statusCode: 301,
-          },
-        };
-      }
-    }
-  } catch (error) {
+  if (response.status === 'success') {
+    return {
+      props: {
+        url: response.data.url.link,
+      },
+      redirect: {
+        destination: response.data.url.link,
+        statusCode: 301,
+      },
+    };
+  } 
     return {
       props: {
         link: 'not found',
       },
     };
-  }
-
-  return {
-    props: {
-      link: 'not found',
-    },
-  };
+  
 };
 
 export default Alias;
