@@ -1,8 +1,3 @@
-const headers = new Headers();
-headers.append('Content-Type', 'application/json');
-headers.append('Accept', 'application/json');
-headers.append('credentials', 'include');
-
 type MethodType = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS';
 
 const refreshTokens = async () => {
@@ -31,6 +26,11 @@ export const fetcher = async <T>(
   method: MethodType,
   payload?: T
 ) => {
+  const headers = new Headers();
+  headers.append('Content-Type', 'application/json');
+  headers.append('Accept', 'application/json');
+  headers.append('credentials', 'include');
+
   try {
     const response = async () => {
       try {

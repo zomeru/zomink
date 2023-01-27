@@ -10,14 +10,19 @@ const Alias = ({ link }: { link: string }) => {
   const { push } = useRouter();
 
   useEffect(() => {
+    let isMounted = true;
+
     if (link !== 'not found') push(link);
-    if (link === 'not found') setRequestMade(true);
+    if (isMounted && link === 'not found') setRequestMade(true);
 
     const timer = setTimeout(() => {
       setRequestMade(true);
     }, 5000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
   }, [link]);
 
   if (requestMade || link === 'not found') {
