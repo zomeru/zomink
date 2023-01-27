@@ -13,9 +13,11 @@ const Alias = ({ link }: { link: string }) => {
     if (link !== 'not found') push(link);
     if (link === 'not found') setRequestMade(true);
 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setRequestMade(true);
     }, 5000);
+
+    return () => clearTimeout(timer);
   }, [link]);
 
   if (requestMade || link === 'not found') {
@@ -50,20 +52,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (response.status === 'success') {
     return {
       props: {
-        url: response.data.url.link,
+        link: response.data.url.link,
       },
       redirect: {
         destination: response.data.url.link,
         statusCode: 301,
       },
     };
-  } 
-    return {
-      props: {
-        link: 'not found',
-      },
-    };
-  
+  }
+  return {
+    props: {
+      link: 'not found',
+    },
+  };
 };
 
 export default Alias;
