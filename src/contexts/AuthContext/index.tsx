@@ -45,15 +45,9 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDocument | undefined>();
 
   useEffect(() => {
-    // const token = document.cookie
-    //   .split('; ')
-    //   .filter((row) => row.startsWith('access='))
-    //   .map((c) => c.split('=')[1])[0];
-
     const getCurrentUser = async () => {
       try {
         const response = await fetcher('/users/me', 'GET');
-        console.log('response context', response);
         if (response?.status === 'success') {
           setUser(response.data.user);
         }
