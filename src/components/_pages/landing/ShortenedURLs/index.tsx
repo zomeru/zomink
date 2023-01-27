@@ -18,24 +18,32 @@ const UrlComponent = ({
   return (
     <div className='space-y-5'>
       <div>
-        <div className='flex justify-between'>
-          <p className='my-auto w-[300px] truncate text-primary-500'>
+        <div className='flex flex-col justify-between sm:flex-row'>
+          <p className='my-auto w-full truncate text-primary-500 sm:w-[300px]'>
             {url}
           </p>
-          <div className='mr-2 space-x-4'>
+          <div className='mr-2 flex flex-col items-start space-x-4 sm:flex-row sm:items-center'>
             <a
               href={shortURL}
               target='_blank'
               rel='noopener noreferrer'
-              className='text-primary-200'
+              className='truncate text-primary-200'
             >
               {shortURL}
             </a>
             <button
+              type='button'
+              className='mt-3 block self-center text-primary-300 sm:hidden'
+              onClick={onCopy}
+              disabled={copied}
+            >
+              {copied ? 'Copied' : 'Copy'}
+            </button>
+            <button
               onClick={onCopy}
               disabled={copied}
               type='button'
-              className='btn-secondary h-[35]'
+              className='btn-secondary hidden h-[35] sm:block'
             >
               {copied ? 'Copied' : 'Copy'}
             </button>
@@ -109,8 +117,8 @@ const ShortenedURLs = ({ urls }: { urls: Array<URLDocument> }) => {
         );
       })}
       <div className=''>
-        <div className='flex w-full items-center justify-between'>
-          <h2 className='text-xl font-bold text-primary-500'>
+        <div className='flex w-full items-center justify-between space-x-2'>
+          <h2 className='text-base font-bold text-primary-500 sm:text-xl'>
             Want to manage, customize, and track your links?
           </h2>
           <button type='button' className='btn-primary'>

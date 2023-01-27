@@ -22,7 +22,7 @@ const Hero = () => {
             <h3 className='text-sm text-infoText sm:text-base'>
               {APP_DESCRIPTION}
             </h3>
-            <div className='space-x-3'>
+            <div className='flex max-w-[250px] flex-col space-y-3 sm:max-w-full sm:flex-row sm:space-y-0 sm:space-x-3'>
               <button
                 type='button'
                 className='btn-primary-lg'

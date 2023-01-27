@@ -33,7 +33,7 @@ a {
   }
 
   .btn-primary {
-    @apply h-[45px] rounded-lg bg-primary-200 px-[20px] text-white transition-all duration-200 ease-in-out hover:bg-primary-300;
+    @apply h-[45px] rounded-lg bg-primary-200 px-[20px] py-[5px] text-sm text-white transition-all duration-200 ease-in-out hover:bg-primary-300 sm:text-base;
   }
 
   .btn-secondary {
