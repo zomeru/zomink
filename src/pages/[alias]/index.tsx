@@ -9,6 +9,8 @@ const Alias = ({ link }: { link: string }) => {
   const [requestMade, setRequestMade] = React.useState(false);
   const { push } = useRouter();
 
+  console.log('link', link);
+
   useEffect(() => {
     let isMounted = true;
 
@@ -53,6 +55,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     `/${alias}/${encodeURIComponent(userAgent)}/urls`,
     'GET'
   );
+
+  console.log('alias response', response);
 
   if (response.status === 'success') {
     return {
