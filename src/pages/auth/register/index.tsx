@@ -1,7 +1,9 @@
 import React from 'react';
+import { GetServerSideProps } from 'next';
 
 import { Layout } from '@/components';
 import { RegisterComponent } from '@/components/_pages/auth';
+import fetcher from '@/utils/fetcher';
 
 const Register = () => {
   return (
@@ -12,3 +14,27 @@ const Register = () => {
 };
 
 export default Register;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req } = context;
+
+  const accessToken = req.cookies.access;
+
+  const response = await fetcher(`/auth/access/${accessToken}`, 'POST');
+
+  console.log('response register', response);
+
+  if (response.status === 'success') {
+    return {
+      props: {},
+      redirect: {
+        destination: '/dashboard',
+        statusCode: 302,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

@@ -14,6 +14,7 @@ export default async function middleware(req: NextRequest) {
   try {
     if (url.includes('/dashboard')) {
       const response = await fetcher(`/auth/access/${token}`, 'POST');
+      console.log('response 1', response);
       if (response.status === 'success') {
         return NextResponse.next();
       }
@@ -21,6 +22,7 @@ export default async function middleware(req: NextRequest) {
     }
     if (isUrlNoUserRoute) {
       const response = await fetcher(`/auth/access/${token}`, 'POST');
+      console.log('response 2', response);
       if (response.status === 'success') {
         return NextResponse.redirect(new URL('/dashboard', url));
       }

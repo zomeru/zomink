@@ -53,6 +53,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
     const getCurrentUser = async () => {
       try {
         const response = await fetcher('/users/me', 'GET');
+        console.log('response context', response);
         if (response?.status === 'success') {
           setUser(response.data.user);
         }
