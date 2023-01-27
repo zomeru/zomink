@@ -31,18 +31,22 @@ export const fetcher = async <T>(
   headers.append('Accept', 'application/json');
   headers.append('credentials', 'include');
 
+  const requestInit: any = {
+    method,
+    headers,
+    credentials: 'include',
+  };
+
+  if (method !== 'GET' && payload) {
+    requestInit.body = JSON.stringify(payload);
+  }
+
   try {
     const response = async () => {
+      const ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT as string;
+
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_ENDPOINT}${url}`,
-          {
-            method,
-            headers,
-            credentials: 'include',
-            body: JSON.stringify(payload),
-          }
-        );
+        const res = await fetch(`${ENDPOINT}${url}`, requestInit);
 
         return res.json();
       } catch (error) {

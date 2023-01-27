@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import Link from 'next/link';
 
 import { APP_NAME, FOOTER_LINKS, FOOTER_SOCIALS } from '../constants';
 import Logo from '../Logo';
 
-const Footer = () => {
+interface PropsType {}
+
+const Footer = forwardRef<HTMLElement, PropsType>((_, ref) => {
   return (
-    <>
-      <footer className='padding-sides my-[60px] sm:my-[80px] '>
+    <footer ref={ref}>
+      <div className='padding-sides py-[60px] sm:py-[80px] '>
         <div className='max-width flex max-w-[1000px] flex-col items-center justify-between space-y-8 sm:flex-row sm:items-start sm:space-y-0'>
           {FOOTER_LINKS.map(({ title, links }) => (
             <div key={title}>
@@ -43,7 +45,7 @@ const Footer = () => {
             </div>
             <div className='text-infoText'>
               <h1 className='text-center sm:text-start'>
-                &copy; 2022 | {APP_NAME}
+                &copy; 2023 | {APP_NAME}
               </h1>
               <h2 className='text-center sm:text-start'>
                 Free Custom Link Shortener
@@ -74,7 +76,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-      </footer>
+      </div>
       <div className='flex h-[40px] w-full items-center justify-center bg-primary-200'>
         <p className='text-sm text-white sm:text-base'>
           Built by{' '}
@@ -88,8 +90,8 @@ const Footer = () => {
           </a>
         </p>
       </div>
-    </>
+    </footer>
   );
-};
+});
 
 export default Footer;

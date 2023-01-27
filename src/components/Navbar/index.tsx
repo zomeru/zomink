@@ -12,7 +12,7 @@ const Navbar = () => {
 
   return (
     <header className='padding-sides w-auto'>
-      <nav className='max-width  flex h-[100px] w-full items-center justify-between text-primary-500'>
+      <nav className='max-width flex h-[100px] w-full items-center justify-between text-primary-500'>
         <Link href='/' passHref>
           <a>
             <Logo />

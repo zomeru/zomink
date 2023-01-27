@@ -1,41 +1,29 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
 import fetcher from '@/utils/fetcher';
-import { Maintenance } from '@/components';
 
 const Alias = ({ link }: { link: string }) => {
-  const [requestMade, setRequestMade] = React.useState(false);
   const { push } = useRouter();
-
-  console.log('link', link);
 
   useEffect(() => {
     let isMounted = true;
 
     if (link !== 'not found') push(link);
-    if (isMounted && link === 'not found') setRequestMade(true);
+    if (isMounted && link === 'not found') {
+      push('/404');
+    }
 
     const timer = setTimeout(() => {
-      setRequestMade(true);
-    }, 5000);
+      push('/404');
+    }, 3000);
 
     return () => {
       isMounted = false;
       clearTimeout(timer);
     };
   }, [link]);
-
-  if (requestMade || link === 'not found') {
-    return (
-      <Maintenance>
-        <h1 className='mb-4 text-2xl font-medium'>
-          Unable to find URL to redirect to
-        </h1>
-      </Maintenance>
-    );
-  }
 
   return null;
 };
@@ -44,7 +32,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req } = context;
   const { alias } = context.params as { alias: string };
 
-  const userAgent = req.headers['user-agent'] as string;
+  if (alias === 'sw.js') return { props: {} };
+
+  const userAgent = req.headers['user-agent']?.toString() || '';
 
   const response: {
     status: string;
@@ -55,8 +45,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     `/${alias}/${encodeURIComponent(userAgent)}/urls`,
     'GET'
   );
-
-  console.log('alias response', response);
 
   if (response.status === 'success') {
     return {

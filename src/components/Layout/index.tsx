@@ -1,3 +1,4 @@
+import { useElementDimensions } from '@/hooks';
 import React from 'react';
 
 import { Footer, Navbar } from '..';
@@ -7,11 +8,21 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const footerRef = React.useRef<HTMLElement>(null);
+
+  const { height } = useElementDimensions(footerRef);
+
   return (
     <>
       <Navbar />
-      <main className='min-h-[calc(100vh - 100px)]'>{children}</main>
-      <Footer />
+      <main
+        style={{
+          minHeight: `calc(100vh - (100px + ${height}px))`,
+        }}
+      >
+        {children}
+      </main>
+      <Footer ref={footerRef} />
     </>
   );
 };
