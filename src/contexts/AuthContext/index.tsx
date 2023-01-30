@@ -92,9 +92,11 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
   };
 
   const logout = async () => {
-    await fetcher('/auth/logout', 'POST');
-    setUser(undefined);
-    Router.replace('/');
+    const logoutData = await fetcher('/auth/logout', 'POST');
+    if (logoutData.status === 200) {
+      setUser(undefined);
+      window.location.href = '/';
+    }
   };
 
   const value = useMemo(
