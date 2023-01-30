@@ -74,6 +74,7 @@ const Login = () => {
           <form
             onSubmit={handleSubmit}
             className='mx-auto my-auto max-w-[500px] space-y-6 text-center'
+            autoComplete='on'
           >
             <h1 className='sc-heading text-primary-400'>Log in</h1>
             <p className=' text-infoText'>
@@ -110,6 +111,7 @@ const Login = () => {
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                autoComplete='on'
               />
 
               <input
@@ -122,6 +124,7 @@ const Login = () => {
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                autoComplete='on'
               />
             </div>
 
