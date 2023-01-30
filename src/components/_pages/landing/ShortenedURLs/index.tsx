@@ -89,7 +89,7 @@ const ShortenedURLs = ({ urls }: { urls: Array<URLDocument> }) => {
     }
   };
 
-  const URL = `${process.env.NEXT_PUBLIC_PROTOCOL}//${process.env.NEXT_PUBLIC_DOMAIN}`;
+  const URL = `${process.env.NEXT_PUBLIC_PROTOCOL}//${process.env.NEXT_PUBLIC_APP_DOMAIN}`;
 
   return (
     <div className='mt-4 w-full rounded-lg bg-white p-[20px]'>

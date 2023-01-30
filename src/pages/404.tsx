@@ -25,5 +25,3 @@ const NotFound = () => {
 };
 
 export default NotFound;
-
-// This is a 404 error, which means you've clicked on a bad link or entered an invalid URL. Maybe what you are looking for can be found at Bitly.com. P.S. Bitly links are case sensitive.
