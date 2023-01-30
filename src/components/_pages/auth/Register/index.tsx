@@ -68,6 +68,7 @@ const Register = () => {
           <form
             onSubmit={handleSubmit}
             className='mx-auto my-auto max-w-[500px] space-y-6 text-center'
+            autoComplete='on'
           >
             <h1 className='sc-heading text-primary-400'>Sign up</h1>
             <p className=' text-infoText'>
@@ -104,6 +105,7 @@ const Register = () => {
                   value={values.username}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  autoComplete='on'
                 />
                 <p className='ml-1 text-left text-sm text-infoText'>
                   At least 6 characters
@@ -120,6 +122,7 @@ const Register = () => {
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                autoComplete='on'
               />
               <input
                 type='text'
@@ -131,6 +134,7 @@ const Register = () => {
                 value={values.firstName}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                autoComplete='on'
               />
               <input
                 type='text'
@@ -142,6 +146,7 @@ const Register = () => {
                 value={values.lastName}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                autoComplete='on'
               />
               <div className='space-y-1'>
                 <input
@@ -154,6 +159,7 @@ const Register = () => {
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  autoComplete='on'
                 />
                 {/* // TODO: Re-enable */}
                 {/* <p className='ml-1 text-left text-sm text-infoText'>
@@ -177,6 +183,7 @@ const Register = () => {
                   value={values.passwordConfirmation}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  autoComplete='on'
                 />
                 <p
                   className={`duration-800 ml-1 text-center text-sm text-red-400 transition-all ease-in-out ${
