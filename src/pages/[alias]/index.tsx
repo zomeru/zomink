@@ -1,31 +1,55 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
+import { DefaultSeo } from 'next-seo';
 
 import fetcher from '@/utils/fetcher';
+import NotFound from '../404';
 
-const Alias = ({ link }: { link: string }) => {
-  const { push } = useRouter();
+type MetaData = {
+  title: string;
+  description: string;
+  domain: string;
+  images: string[];
+  duration: number;
+  url: string;
+};
+
+const Alias = ({ metaData }: { metaData: MetaData }) => {
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
-
-    if (link !== 'not found') push(link);
-    if (isMounted && link === 'not found') {
-      push('/404');
-    }
-
     const timer = setTimeout(() => {
-      push('/404');
-    }, 3000);
+      setNotFound(true);
+    }, 3500);
 
     return () => {
-      isMounted = false;
       clearTimeout(timer);
     };
-  }, [link]);
+  }, []);
 
-  return null;
+  if (notFound) return <NotFound />;
+
+  return (
+    <>
+      {metaData && (
+        <DefaultSeo
+          title={metaData.title}
+          description={metaData.description}
+          openGraph={{
+            url: metaData.url,
+            type: 'website',
+            title: metaData.title,
+            description: metaData.description,
+            images: metaData.images.map((image) => ({
+              url: image,
+              alt: metaData.title,
+            })),
+            site_name: metaData.domain,
+          }}
+        />
+      )}
+    </>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -47,9 +71,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   );
 
   if (response.status === 'success') {
+    const metaResponse = await fetch(
+      `https://jsonlink.io/api/extract?url=${response.data.url.link}`
+    );
+    const metaData = await metaResponse.json();
+
     return {
       props: {
-        link: response.data.url.link,
+        // link: response.data.url.link,
+        metaData,
       },
       redirect: {
         destination: response.data.url.link,
@@ -58,9 +88,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
   return {
-    props: {
-      link: 'not found',
-    },
+    props: {},
   };
 };
 

@@ -46,6 +46,7 @@
     "class-methods-use-this": ["off"],
     "max-classes-per-file": ["off"],
     "consistent-return": "off",
+    "react/jsx-no-useless-fragment": "off",
     "react/jsx-filename-extension": [
       2,
       {

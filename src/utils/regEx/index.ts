@@ -7,7 +7,7 @@ export const linkAccepted = (link: string): boolean => {
 
   return !INVALID_LINKS.includes(
     hostname?.replace('www.', '') ||
-      (process.env.NEXT_PUBLIC_DOMAIN as string) ||
+      (process.env.NEXT_PUBLIC_APP_DOMAIN as string) ||
       ''
   );
 };
