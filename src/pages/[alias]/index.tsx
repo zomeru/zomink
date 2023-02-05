@@ -4,6 +4,7 @@ import { DefaultSeo } from 'next-seo';
 
 import fetcher from '@/utils/fetcher';
 import NotFound from '../404';
+import SEO from '../../../next-seo-config';
 
 type MetaData = {
   title: string;
@@ -20,14 +21,21 @@ const Alias = ({ metaData }: { metaData: MetaData }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setNotFound(true);
-    }, 3500);
+    }, 1500);
 
     return () => {
       clearTimeout(timer);
     };
   }, []);
 
-  if (notFound) return <NotFound />;
+  if (notFound) {
+    return (
+      <>
+        <DefaultSeo {...SEO} />
+        <NotFound />
+      </>
+    );
+  }
 
   return (
     <>
@@ -78,7 +86,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
       props: {
-        // link: response.data.url.link,
         metaData,
       },
       redirect: {
