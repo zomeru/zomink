@@ -61,24 +61,20 @@ const Alias = ({ metaData }: { metaData: MetaData }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { req } = context;
   const { alias } = context.params as { alias: string };
 
   if (alias === 'sw.js') return { props: {} };
 
-  const userAgent = req.headers['user-agent']?.toString() || '';
+  // const userAgent = req.headers['user-agent']?.toString() || '';
 
-  console.log('userAgent', encodeURIComponent(userAgent));
+  // console.log('userAgent', encodeURIComponent(userAgent));
 
   const response: {
     status: string;
     data: {
       url: any;
     };
-  } = await fetcher(
-    `/${alias}/${encodeURIComponent(userAgent)}/urls`,
-    'GET'
-  );
+  } = await fetcher(`/${alias}/urls`, 'GET');
 
   console.log('response', response);
 
