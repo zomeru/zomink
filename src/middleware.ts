@@ -5,6 +5,7 @@ import fetcher from './utils/fetcher';
 
 export default async function middleware(req: NextRequest) {
   const token = req.cookies.get('access');
+  console.log('token', token);
   const { url } = req;
   const noUserRoutes = ['/auth/login', '/auth/register'];
   const isUrlNoUserRoute = noUserRoutes.some((route) =>
@@ -14,6 +15,7 @@ export default async function middleware(req: NextRequest) {
   try {
     if (url.includes('/dashboard')) {
       const response = await fetcher(`/auth/access/${token}`, 'POST');
+      console.log('dash response', response);
       if (response.status === 'success') {
         return NextResponse.next();
       }
@@ -21,6 +23,7 @@ export default async function middleware(req: NextRequest) {
     }
     if (isUrlNoUserRoute) {
       const response = await fetcher(`/auth/access/${token}`, 'POST');
+      console.log('no user route response', response);
       if (response.status === 'success') {
         return NextResponse.redirect(new URL('/dashboard', url));
       }
