@@ -68,6 +68,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const userAgent = req.headers['user-agent']?.toString() || '';
 
+  console.log('userAgent', encodeURIComponent(userAgent));
+
   const response: {
     status: string;
     data: {
@@ -78,11 +80,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     'GET'
   );
 
+  console.log('response', response);
+
   if (response.status === 'success') {
     const metaResponse = await fetch(
       `https://jsonlink.io/api/extract?url=${response.data.url.link}`
     );
     const metaData = await metaResponse.json();
+
+    console.log('metaData', metaData);
 
     return {
       props: {
