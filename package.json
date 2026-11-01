@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "formik": "^2.2.9",
-    "next": "12.2.5",
+    "next": "15.5.28",
     "next-seo": "^5.5.0",
     "next-sitemap": "^3.1.22",
     "nprogress": "^0.2.0",
